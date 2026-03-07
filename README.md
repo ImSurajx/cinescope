@@ -1,16 +1,62 @@
-# React + Vite
+# CineScope 🎬
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CineScope is a movie discovery platform where users can explore trending movies, search for films in real time, watch trailers, and manage their movie preferences.
 
-Currently, two official plugins are available:
+This project is being built as part of a **Full-Stack development challenge / hackathon**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend
+- React (Vite)
+- TailwindCSS
+- React Router
+- TMDB API
 
-## Expanding the ESLint configuration
+### Backend (Planned)
+- Node.js
+- Express.js
+- MongoDB
+- JWT Authentication
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ✨ Features
+
+- Browse **Trending Movies**
+- Explore **Popular Movies & TV Shows**
+- **Real-time Search**
+- **Trailer Preview**
+- **Responsive UI**
+- **Infinite Scrolling**
+- **Favorites System**
+- **Watch History**
+
+---
+
+## 📦 Installation
+
+Clone the repository and run the project locally.
+
+```bash
+git clone https://github.com/YOUR_USERNAME/cinescope.git
+cd cinescope
+npm install
+npm run dev
+
+---
+## 🌐 API
+This project uses the TMDB (The Movie Database) API to fetch movie and TV show data.
+
+---
+## 🎯 Project Goal
+The goal of this project is to build a real-world full-stack movie platform using modern technologies and best practices.
+
+---
+## 📌 Status
+🚧 Currently under development as part of a 48-hour hackathon build.
+
+--- 
+## 📄 License
+This project is open source and available under the MIT License.
