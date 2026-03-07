@@ -1,63 +1,74 @@
 import { NavLink } from "react-router-dom"
+
 function BottomNav() {
+
+    const isLoggedIn = false
+
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-background-dark/90 backdrop-blur-xl border-t border-white/10 px-6 py-3">
+        <div className="fixed bottom-0 left-0 right-0 z-50 flex border-t border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark px-4 pb-4 pt-3">
 
-            <div className="flex items-center justify-between">
+            {/* Home */}
+            <NavLink
+                to="/"
+                className={({ isActive }) =>
+                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive ? "text-primary" : "text-slate-500 dark:text-slate-400"
+                    }`
+                }
+            >
+                <span className="material-symbols-outlined">home</span>
 
-                <NavLink
-                    to="/"
-                    className={({ isActive }) =>
-                        `flex flex-col items-center gap-1 ${isActive ? "text-primary" : "text-slate-500"
-                        }`
-                    }
-                >
-                    <span className="material-symbols-outlined fill-1">home</span>
-                    <span className="text-[10px] font-bold uppercase tracking-widest">
-                        Home
-                    </span>
-                </NavLink>
+                <p className="text-[10px] font-bold uppercase tracking-wider">
+                    Home
+                </p>
+            </NavLink>
 
-                <NavLink
-                    to="/discover"
-                    className={({ isActive }) =>
-                        `flex flex-col items-center gap-1 ${isActive ? "text-primary" : "text-slate-500"
-                        }`
-                    }
-                >
-                    <span className="material-symbols-outlined">explore</span>
-                    <span className="text-[10px] font-bold uppercase tracking-widest">
-                        Discover
-                    </span>
-                </NavLink>
 
-                <NavLink
-                    to="/favorites"
-                    className={({ isActive }) =>
-                        `flex flex-col items-center gap-1 ${isActive ? "text-primary" : "text-slate-500"
-                        }`
-                    }
-                >
-                    <span className="material-symbols-outlined">favorite</span>
-                    <span className="text-[10px] font-bold uppercase tracking-widest">
-                        Favorites
-                    </span>
-                </NavLink>
+            {/* Discover */}
+            <NavLink
+                to="/discover"
+                className={({ isActive }) =>
+                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive ? "text-primary" : "text-slate-500 dark:text-slate-400"
+                    }`
+                }
+            >
+                <span className="material-symbols-outlined">explore</span>
 
-                <NavLink
-                    to="/profile"
-                    className={({ isActive }) =>
-                        `flex flex-col items-center gap-1 ${isActive ? "text-primary" : "text-slate-500"
-                        }`
-                    }
-                >
-                    <span className="material-symbols-outlined">person</span>
-                    <span className="text-[10px] font-bold uppercase tracking-widest">
-                        Profile
-                    </span>
-                </NavLink>
+                <p className="text-[10px] font-bold uppercase tracking-wider">
+                    Discover
+                </p>
+            </NavLink>
 
-            </div>
+
+            {/* Favorites */}
+            <NavLink
+                to="/favorites"
+                className={({ isActive }) =>
+                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive ? "text-primary" : "text-slate-500 dark:text-slate-400"
+                    }`
+                }
+            >
+                <span className="material-symbols-outlined">favorite</span>
+
+                <p className="text-[10px] font-bold uppercase tracking-wider">
+                    Favorites
+                </p>
+            </NavLink>
+
+
+            {/* Profile / Login */}
+            <NavLink
+                to={isLoggedIn ? "/profile" : "/login"}
+                className={({ isActive }) =>
+                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive ? "text-primary" : "text-slate-500 dark:text-slate-400"
+                    }`
+                }
+            >
+                <span className="material-symbols-outlined">person</span>
+
+                <p className="text-[10px] font-bold uppercase tracking-wider">
+                    Profile
+                </p>
+            </NavLink>
 
         </div>
     )

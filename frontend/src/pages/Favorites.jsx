@@ -46,11 +46,11 @@ function Favorites() {
 
 
                 {/* Favorites Grid */}
-                <main className="flex-1">
+                <main className="flex-1 pb-16 pt-16">
                     <div className="max-w-7xl mx-auto px-4">
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                            {/* Movie Cards */}
+
                             <MovieCard
                                 title="Inception"
                                 year="2010"
@@ -93,6 +93,7 @@ function Favorites() {
                                 rating="8.0"
                                 image="https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg"
                             />
+
                         </div>
 
                     </div>
