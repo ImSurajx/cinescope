@@ -14,7 +14,7 @@ export default {
         "surface-dark": "#171717",
       },
       fontFamily: {
-        display: ["Public Sans", "sans-serif"],
+        sans: ["Poppins", "sans-serif"],
       },
       borderRadius: {
         DEFAULT: "0.25rem",

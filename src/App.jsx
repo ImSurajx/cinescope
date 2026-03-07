@@ -1,7 +1,11 @@
-import Home from "./pages/Home"
+import Login from "./pages/AdminDashboard"
 
 function App() {
-  return <Home />
+  return (
+    <>
+      <Login />
+    </>
+  )
 }
 
 export default App
