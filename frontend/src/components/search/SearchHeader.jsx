@@ -1,3 +1,4 @@
+import { Link, NavLink } from "react-router-dom"
 function SearchHeader({ query = "Inception" }) {
     return (
         <header className="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-accent-dark px-4 py-3">
@@ -9,20 +10,15 @@ function SearchHeader({ query = "Inception" }) {
                         <span className="material-symbols-outlined text-primary text-3xl">
                             movie_filter
                         </span>
-                        <h1 className="text-xl font-bold tracking-tight">CineScope</h1>
+                        <Link to="/" className="text-xl font-bold tracking-tight">CineScope</Link>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <button className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-accent-dark transition-colors">
-                            <span className="material-symbols-outlined">notifications</span>
-                        </button>
-
-                        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
-                            <span className="material-symbols-outlined text-primary text-sm">
-                                person
-                            </span>
-                        </div>
-                    </div>
+                    <Link to="/profile" className="hidden md:block h-8 w-8 rounded-full bg-primary/20 border border-primary/30 overflow-hidden">
+                        <img
+                            alt="Profile"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP6KWn50pnStxFK-5hLZQRhAqegw-OK2vPFZT2IwFpAAMG4svl-ort-mtL-cINJaXYuqS72ZfBq685qoDBlbLT6ArGEpgC9GxBFwHXvcvTENJXJwxZRimgXatEBI7aqT1OEO0kbYTzKXIb6D3w7-G6wQ-wEY_vbJ1pau4io0nZm3tJSoDwAshd9iA0-_umKUIylWp7dD1C2Cui5vbWWVri7XUV-GgxOxO7YRqVZNbXd8RY_teYQ4mCcnsAO3CWjDt97yChy9_hx5iu"
+                        />
+                    </Link>
                 </div>
 
                 {/* Search Input */}
