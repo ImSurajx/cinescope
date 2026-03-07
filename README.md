@@ -34,18 +34,6 @@ This project is being built as part of a **Full-Stack development challenge / ha
 - **Watch History**
 
 ---
-
-## 📦 Installation
-
-Clone the repository and run the project locally.
-
-```bash
-git clone https://github.com/YOUR_USERNAME/cinescope.git
-cd cinescope
-npm install
-npm run dev
-
----
 ## 🌐 API
 This project uses the TMDB (The Movie Database) API to fetch movie and TV show data.
 
@@ -56,6 +44,18 @@ The goal of this project is to build a real-world full-stack movie platform usin
 ---
 ## 📌 Status
 🚧 Currently under development as part of a 48-hour hackathon build.
+
+
+## 📦 Installation
+
+Clone the repository and run the project locally.
+
+```bash
+git clone https://github.com/YOUR_USERNAME/cinescope.git
+cd cinescope
+npm install
+npm run dev
+```
 
 --- 
 ## 📄 License
