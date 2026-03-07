@@ -1,14 +1,14 @@
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
-import BottomNav from "../components/BottomNav"
+import Navbar from "../components/layout/Navbar"
+import Footer from "../components/layout/Footer"
+import BottomNav from "../components/layout/BottomNav"
 
-import MovieHero from "../components/MovieHero"
-import MovieActions from "../components/MovieActions"
-import PlotSummary from "../components/PlotSummary"
+import MovieHero from "../components/movie/MovieHero"
+import MovieActions from "../components/movie/MovieActions"
+import PlotSummary from "../components/movie/PlotSummary"
 
-import CastCard from "../components/CastCard"
-import MovieRow from "../components/MovieRow"
-import MovieCard from "../components/MovieCard"
+import CastCard from "../components/movie/CastCard"
+import MovieRow from "../components/movie/MovieRow"
+import MovieCard from "../components/movie/MovieCard"
 function MovieDetails() {
     return (
         <>

@@ -1,8 +1,10 @@
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
-import BottomNav from "../components/BottomNav"
-import SearchHeader from "../components/SearchHeader"
-import MovieCard from "../components/MovieCard"
+import Navbar from "../components/layout/Navbar"
+import Footer from "../components/layout/Footer"
+import BottomNav from "../components/layout/BottomNav"
+
+import SearchHeader from "../components/search/SearchHeader"
+
+import MovieCard from "../components/movie/MovieCard"
 
 function SearchResults() {
 

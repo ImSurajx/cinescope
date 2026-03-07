@@ -1,10 +1,11 @@
-import Navbar from "../components/Navbar"
-import BottomNav from "../components/BottomNav"
-import Footer from "../components/Footer"
+import Navbar from "../components/layout/Navbar"
+import BottomNav from "../components/layout/BottomNav"
+import Footer from "../components/layout/Footer"
 
-import MovieCard from "../components/MovieCard"
-import MovieRow from "../components/MovieRow"
-import WatchHistoryCard from "../components/WatchHistoryCard"
+import MovieCard from "../components/movie/MovieCard"
+import MovieRow from "../components/movie/MovieRow"
+
+import WatchHistoryCard from "../components/profile/WatchHistoryCard"
 
 function Profile() {
     return (

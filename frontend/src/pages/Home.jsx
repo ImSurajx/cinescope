@@ -1,9 +1,9 @@
-import Navbar from "../components/Navbar";
-import HeroBanner from "../components/HeroBanner";
-import MovieCard from "../components/MovieCard";
-import MovieRow from "../components/MovieRow";
-import Footer from "../components/Footer";
-import BottomNav from "../components/BottomNav";
+import Navbar from "../components/layout/Navbar"
+import HeroBanner from "../components/movie/HeroBanner"
+import MovieCard from "../components/movie/MovieCard"
+import MovieRow from "../components/movie/MovieRow"
+import Footer from "../components/layout/Footer"
+import BottomNav from "../components/layout/BottomNav"
 function Home() {
     return (
         <>

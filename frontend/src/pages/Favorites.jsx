@@ -1,7 +1,8 @@
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
-import BottomNav from "../components/BottomNav"
-import MovieCard from "../components/MovieCard"
+import Navbar from "../components/layout/Navbar"
+import Footer from "../components/layout/Footer"
+import BottomNav from "../components/layout/BottomNav"
+
+import MovieCard from "../components/movie/MovieCard"
 
 function Favorites() {
     return (

@@ -1,7 +1,7 @@
-import AdminSidebar from "../components/admin/AdminSidebar"
-import AdminStats from "../components/admin/AdminStats"
-import AdminAddMovieForm from "../components/admin/AdminAddMovieForm"
-import AdminMovieTable from "../components/admin/AdminMovieTable"
+import AdminSidebar from "../../components/admin/AdminSidebar"
+import AdminStats from "../../components/admin/AdminStats"
+import AdminAddMovieForm from "../../components/admin/AdminAddMovieForm"
+import AdminMovieTable from "../../components/admin/AdminMovieTable"
 
 function AdminDashboard() {
 
