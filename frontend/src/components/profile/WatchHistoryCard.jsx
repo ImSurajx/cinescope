@@ -1,41 +1,33 @@
-function WatchHistoryCard({ title, year, image, progress }) {
-  return (
-    <div className="flex flex-col gap-2 group">
+function WatchHistoryCard({ title, image, progress }) {
+    return (
+        <div className="flex flex-col gap-2 group shrink-0 w-[190px]">
 
-      {/* Poster */}
-      <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-slate-800">
+            {/* Poster */}
+            <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-slate-800">
 
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+                <img
+                    src={image}
+                    alt={title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
 
-      </div>
+                {/* Progress */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-black/50">
+                    <div
+                        className="h-full bg-primary"
+                        style={{ width: `${progress}%` }}
+                    />
+                </div>
 
-      {/* Movie Info */}
-      <div>
+            </div>
 
-        <h3 className="font-bold text-sm truncate">
-          {title}
-        </h3>
+            {/* Title */}
+            <h3 className="text-sm font-bold truncate">
+                {title}
+            </h3>
 
-        <div className="text-xs text-slate-400 mt-1">
-          {year}
         </div>
-
-        {/* Progress Bar */}
-        <div className="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
-          <div
-            className="bg-primary h-full"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-
-      </div>
-
-    </div>
-  )
+    )
 }
 
 export default WatchHistoryCard
