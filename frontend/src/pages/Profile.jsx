@@ -1,3 +1,5 @@
+import { useAuth } from "../context/AuthContext"
+
 import Navbar from "../components/layout/Navbar"
 import BottomNav from "../components/layout/BottomNav"
 import Footer from "../components/layout/Footer"
@@ -5,40 +7,139 @@ import Footer from "../components/layout/Footer"
 import MovieRow from "../components/movie/MovieRow"
 import WatchHistoryCard from "../components/profile/WatchHistoryCard"
 
+import { fetchWatchHistory } from "../services/watchHistoryApi"
+
+import { useEffect, useState } from "react"
+import { supabase } from "../lib/supabase"
+
 function Profile() {
+
+    const { user, logout } = useAuth()
+
+    const [history, setHistory] = useState([])
+
+    const name =
+        user?.user_metadata?.full_name ||
+        user?.user_metadata?.name ||
+        user?.email?.split("@")[0] ||
+        "User"
+
+    const avatar =
+        user?.user_metadata?.avatar_url ||
+        null
+
+
+    // Load history initially
+    useEffect(() => {
+
+        async function loadHistory() {
+
+            if (!user) return
+
+            const data = await fetchWatchHistory(user.id)
+
+            setHistory(data)
+
+        }
+
+        loadHistory()
+
+    }, [user])
+
+
+    // Realtime updates
+    useEffect(() => {
+
+        if (!user) return
+
+        const channel = supabase
+            .channel("watch-history-changes")
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                    table: "WatchHistory",
+                    filter: `user_id=eq.${user.id}`
+                },
+                (payload) => {
+
+                    if (payload.eventType === "INSERT") {
+
+                        setHistory(prev => [payload.new, ...prev])
+
+                    }
+
+                    if (payload.eventType === "UPDATE") {
+
+                        setHistory(prev =>
+                            prev.map(item =>
+                                item.id === payload.new.id ? payload.new : item
+                            )
+                        )
+
+                    }
+
+                }
+            )
+            .subscribe()
+
+        return () => {
+
+            supabase.removeChannel(channel)
+
+        }
+
+    }, [user])
+
+
+    if (!user) return null
+
+
     return (
         <>
             <Navbar />
 
             <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
 
-                {/* Container */}
                 <div className="max-w-7xl mx-auto w-full px-4">
 
                     {/* Profile Header */}
                     <header className="flex flex-col items-center py-8">
 
                         <div className="relative group">
-                            <div
-                                className="bg-center bg-no-repeat aspect-square bg-cover rounded-full border-4 border-primary p-1 h-32 w-32 shadow-xl shadow-primary/20"
-                                style={{
-                                    backgroundImage:
-                                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCXKWi6YufVwDzAUPfoGnV_Kw0LfUFYmXKLoxq16y4twEx8T6KLvUl7z70GPLV-aY5QjlJpwSjV2R9wndXYM-SCEazamr-LLtchvPbAY5oUjzXjo-EWp-TSTkmU8DwwjH22nyd0FxiAIY8I7epuJMQXRX2W_twJ0Pv08jxKYWFAxYMQvR5hiKGFdiNlR5bPXbHdjk96tLZAQmpdLdnmSkhA5aMjVEpcWqg3Gz36_kB7wiUISwnk_IDci5_L_eip8Ks6ak9kFoTlCJlG")'
-                                }}
-                            />
+
+                            {avatar ? (
+
+                                <div
+                                    className="bg-center bg-no-repeat aspect-square bg-cover rounded-full border-4 border-primary p-1 h-32 w-32 shadow-xl shadow-primary/20"
+                                    style={{ backgroundImage: `url(${avatar})` }}
+                                />
+
+                            ) : (
+
+                                <div className="flex items-center justify-center rounded-full border-4 border-primary h-32 w-32 bg-slate-800 text-4xl font-bold text-white shadow-xl shadow-primary/20">
+                                    {name.charAt(0).toUpperCase()}
+                                </div>
+
+                            )}
+
                         </div>
 
                         <div className="mt-4 text-center">
+
                             <h2 className="text-2xl font-extrabold tracking-tight">
-                                Alex Cinephile
+                                {name}
                             </h2>
 
                             <div className="mt-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold uppercase tracking-wider">
-                                Premium Member
+                                Member
                             </div>
+
                         </div>
 
                         <div className="mt-6 flex w-full max-w-md gap-4">
+
                             <button className="flex-1 flex items-center justify-center gap-2 rounded-lg h-11 bg-primary text-white text-sm font-bold">
                                 Edit Profile
                             </button>
@@ -46,6 +147,7 @@ function Profile() {
                             <button className="flex items-center justify-center rounded-lg h-11 px-4 bg-slate-800 text-sm font-bold">
                                 Share
                             </button>
+
                         </div>
 
                     </header>
@@ -83,29 +185,16 @@ function Profile() {
 
                         <MovieRow title="Watch History">
 
-                            <WatchHistoryCard
-                                title="Inception"
-                                image="https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"
-                                progress={80}
-                            />
+                            {history.map(movie => (
 
-                            <WatchHistoryCard
-                                title="Dune"
-                                image="https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg"
-                                progress={50}
-                            />
+                                <WatchHistoryCard
+                                    key={movie.id}
+                                    title={movie.title}
+                                    image={`https://image.tmdb.org/t/p/w500${movie.poster}`}
+                                    progress={movie.progress}
+                                />
 
-                            <WatchHistoryCard
-                                title="The Batman"
-                                image="https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
-                                progress={100}
-                            />
-
-                            <WatchHistoryCard
-                                title="Pulp Fiction"
-                                image="https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg"
-                                progress={25}
-                            />
+                            ))}
 
                         </MovieRow>
 
@@ -120,57 +209,10 @@ function Profile() {
                         </h3>
 
 
-                        <button className="flex items-center justify-between p-4 rounded-xl bg-slate-900/50 hover:bg-primary/5 transition-colors w-full">
-                            <div className="flex items-center gap-3">
-                                <span className="material-symbols-outlined text-primary">
-                                    person
-                                </span>
-                                <span className="text-sm font-semibold">
-                                    Personal Information
-                                </span>
-                            </div>
-
-                            <span className="material-symbols-outlined text-slate-400">
-                                chevron_right
-                            </span>
-                        </button>
-
-
-                        <button className="flex items-center justify-between p-4 rounded-xl bg-slate-900/50 hover:bg-primary/5 transition-colors w-full">
-                            <div className="flex items-center gap-3">
-                                <span className="material-symbols-outlined text-primary">
-                                    notifications_active
-                                </span>
-
-                                <span className="text-sm font-semibold">
-                                    Notifications
-                                </span>
-                            </div>
-
-                            <span className="material-symbols-outlined text-slate-400">
-                                chevron_right
-                            </span>
-                        </button>
-
-
-                        <button className="flex items-center justify-between p-4 rounded-xl bg-slate-900/50 hover:bg-primary/5 transition-colors w-full">
-                            <div className="flex items-center gap-3">
-                                <span className="material-symbols-outlined text-primary">
-                                    security
-                                </span>
-
-                                <span className="text-sm font-semibold">
-                                    Security & Privacy
-                                </span>
-                            </div>
-
-                            <span className="material-symbols-outlined text-slate-400">
-                                chevron_right
-                            </span>
-                        </button>
-
-
-                        <button className="w-full flex items-center gap-3 p-4 mt-4 rounded-xl border-2 border-primary/20 text-primary hover:bg-primary/10 transition-colors">
+                        <button
+                            className="w-full flex items-center gap-3 p-4 mt-4 rounded-xl border-2 border-primary/20 text-primary hover:bg-primary/10 transition-colors"
+                            onClick={logout}
+                        >
 
                             <span className="material-symbols-outlined">
                                 logout

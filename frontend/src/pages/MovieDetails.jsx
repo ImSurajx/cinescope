@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import { addToWatchHistory } from "../services/watchHistoryApi"
+import { useAuth } from "../context/AuthContext"
 
 import {
     fetchMovieDetails,
@@ -29,7 +31,7 @@ function MovieDetails() {
     const [cast, setCast] = useState([])
     const [similar, setSimilar] = useState([])
     const [recommended, setRecommended] = useState([])
-
+    const { user } = useAuth();
     async function loadMovie() {
 
         try {
@@ -64,6 +66,19 @@ function MovieDetails() {
         loadMovie()
     }, [id])
 
+    useEffect(() => {
+
+        if (movie && user) {
+
+            addToWatchHistory({
+                id: movie.id,
+                title: movie.title,
+                poster_path: movie.poster_path
+            }, user)
+
+        }
+
+    }, [movie, user])
 
     if (loading) {
         return (
