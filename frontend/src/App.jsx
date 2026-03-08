@@ -11,6 +11,8 @@ import Signup from "./pages/Signup"
 
 import AdminDashboard from "./pages/admin/AdminDashboard"
 
+import ProtectedRoute from "./components/auth/ProtectedRoute"
+
 function App() {
   return (
     <Routes>
@@ -20,15 +22,39 @@ function App() {
       <Route path="/discover" element={<Discover />} />
       <Route path="/search" element={<SearchResults />} />
       <Route path="/movie/:id" element={<MovieDetails />} />
-      <Route path="/favorites" element={<Favorites />} />
-      <Route path="/profile" element={<Profile />} />
+
+      {/* Protected Pages */}
+      <Route
+        path="/favorites"
+        element={
+          <ProtectedRoute>
+            <Favorites />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Auth */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
       {/* Admin */}
-      <Route path="/admin" element={<AdminDashboard />} />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
 
     </Routes>
   )

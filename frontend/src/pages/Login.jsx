@@ -1,5 +1,39 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { supabase } from "../lib/supabase"
+
 function Login() {
+
+    const navigate = useNavigate()
+
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
+    async function handleLogin(e) {
+
+        e.preventDefault()
+
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        })
+
+        if (error) {
+            alert(error.message)
+        } else {
+            navigate("/")
+        }
+
+    }
+
+    async function loginWithGoogle() {
+
+        await supabase.auth.signInWithOAuth({
+            provider: "google"
+        })
+
+    }
+
     return (
         <div
             className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden bg-cover bg-center bg-no-repeat"
@@ -9,18 +43,12 @@ function Login() {
             }}
         >
 
-            {/* Background Glow Effects */}
             <div className="absolute w-[500px] h-[500px] bg-blue-600/20 blur-[140px] rounded-full -top-40 -left-40"></div>
-
             <div className="absolute w-[500px] h-[500px] bg-purple-600/20 blur-[140px] rounded-full -bottom-40 -right-40"></div>
-
             <div className="absolute w-[300px] h-[300px] bg-primary/20 blur-[120px] rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
 
-
-            {/* Login Card */}
             <div className="relative w-full max-w-md overflow-hidden bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-xl shadow-2xl">
 
-                {/* Header Image */}
                 <div className="relative h-48 w-full overflow-hidden">
 
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10"></div>
@@ -51,8 +79,6 @@ function Login() {
 
                 </div>
 
-
-                {/* Form Section */}
                 <div className="p-6 sm:p-8">
 
                     <h1 className="text-white text-2xl font-bold mb-1">
@@ -63,10 +89,8 @@ function Login() {
                         Log in to your CineScope account to continue
                     </p>
 
+                    <form onSubmit={handleLogin} className="space-y-4">
 
-                    <form className="space-y-4">
-
-                        {/* Email */}
                         <div className="flex flex-col gap-2">
 
                             <label className="text-slate-300 text-sm font-medium px-1">
@@ -83,14 +107,13 @@ function Login() {
                                     type="email"
                                     placeholder="name@example.com"
                                     className="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl h-12 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-transparent outline-none placeholder:text-slate-600"
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
 
                             </div>
 
                         </div>
 
-
-                        {/* Password */}
                         <div className="flex flex-col gap-2">
 
                             <div className="flex justify-between items-center px-1">
@@ -115,23 +138,13 @@ function Login() {
                                     type="password"
                                     placeholder="Enter your password"
                                     className="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl h-12 pl-12 pr-12 focus:ring-2 focus:ring-primary focus:border-transparent outline-none placeholder:text-slate-600"
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
-
-                                <button
-                                    type="button"
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
-                                >
-                                    <span className="material-symbols-outlined text-lg">
-                                        visibility
-                                    </span>
-                                </button>
 
                             </div>
 
                         </div>
 
-
-                        {/* Login Button */}
                         <div className="pt-4">
 
                             <button
@@ -142,12 +155,12 @@ function Login() {
                             </button>
 
                         </div>
-                        {/* Google Login */}
+
                         <button
                             type="button"
+                            onClick={loginWithGoogle}
                             className="w-full h-14 bg-white hover:bg-zinc-100 text-zinc-900 font-semibold rounded-lg transition-colors flex items-center justify-center gap-3"
                         >
-
                             <svg className="w-5 h-5" viewBox="0 0 24 24">
                                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
@@ -156,13 +169,10 @@ function Login() {
                             </svg>
 
                             Sign in with Google
-
                         </button>
 
                     </form>
 
-
-                    {/* Signup */}
                     <div className="mt-8 text-center">
 
                         <p className="text-slate-400 text-sm">
@@ -178,12 +188,6 @@ function Login() {
                     </div>
 
                 </div>
-
-
-                {/* Decorative Glow */}
-                <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
-
-                <div className="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
 
             </div>
 

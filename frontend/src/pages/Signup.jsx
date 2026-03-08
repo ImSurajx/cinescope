@@ -1,6 +1,52 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { supabase } from "../lib/supabase"
 
 function Signup() {
+
+    const navigate = useNavigate()
+
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
+
+    async function handleSignup(e) {
+
+        e.preventDefault()
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match")
+            return
+        }
+
+        const { error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    full_name: name
+                }
+            }
+        })
+
+        if (error) {
+            alert(error.message)
+        } else {
+            alert("Account created successfully!")
+            navigate("/login")
+        }
+
+    }
+
+    async function signupWithGoogle() {
+
+        await supabase.auth.signInWithOAuth({
+            provider: "google"
+        })
+
+    }
+
     return (
         <div
             className="relative min-h-screen w-full flex items-center justify-center bg-cover bg-center bg-no-repeat px-4"
@@ -28,13 +74,14 @@ function Signup() {
 
 
                 {/* Form */}
-                <form className="flex flex-col gap-4">
+                <form onSubmit={handleSignup} className="flex flex-col gap-4">
 
                     {/* Name */}
                     <input
                         type="text"
                         placeholder="Full Name"
                         className="w-full h-14 bg-zinc-800/80 rounded-lg text-white placeholder:text-zinc-500 focus:ring-2 focus:ring-primary transition-all px-4"
+                        onChange={(e) => setName(e.target.value)}
                     />
 
                     {/* Email */}
@@ -42,6 +89,7 @@ function Signup() {
                         type="email"
                         placeholder="Email Address"
                         className="w-full h-14 bg-zinc-800/80 rounded-lg text-white placeholder:text-zinc-500 focus:ring-2 focus:ring-primary transition-all px-4"
+                        onChange={(e) => setEmail(e.target.value)}
                     />
 
                     {/* Password */}
@@ -51,6 +99,7 @@ function Signup() {
                             type="password"
                             placeholder="Password"
                             className="w-full h-14 bg-zinc-800/80 rounded-lg text-white placeholder:text-zinc-500 focus:ring-2 focus:ring-primary transition-all px-4"
+                            onChange={(e) => setPassword(e.target.value)}
                         />
 
                         <button
@@ -69,6 +118,7 @@ function Signup() {
                         type="password"
                         placeholder="Confirm Password"
                         className="w-full h-14 bg-zinc-800/80 rounded-lg text-white placeholder:text-zinc-500 focus:ring-2 focus:ring-primary transition-all px-4"
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                     />
 
                     {/* Create Account */}
@@ -94,9 +144,10 @@ function Signup() {
                     </div>
 
 
-                    {/* Google Login */}
+                    {/* Google Signup */}
                     <button
                         type="button"
+                        onClick={signupWithGoogle}
                         className="w-full h-14 bg-white hover:bg-zinc-100 text-zinc-900 font-semibold rounded-lg transition-colors flex items-center justify-center gap-3"
                     >
 
@@ -128,30 +179,6 @@ function Signup() {
                     </p>
 
                 </div>
-
-            </div>
-
-
-            {/* Footer */}
-            <div className="absolute bottom-4 left-0 w-full text-center px-4">
-
-                <p className="text-zinc-500 text-xs">
-
-                    © 2024 CineScope. All rights reserved.
-
-                    <span className="mx-2">|</span>
-
-                    <span className="hover:underline cursor-pointer">
-                        Privacy Policy
-                    </span>
-
-                    <span className="mx-2">|</span>
-
-                    <span className="hover:underline cursor-pointer">
-                        Terms of Service
-                    </span>
-
-                </p>
 
             </div>
 

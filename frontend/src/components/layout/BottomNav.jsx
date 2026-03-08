@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom"
+import { useAuth } from "../../context/AuthContext"
 
 function BottomNav() {
 
-    const isLoggedIn = false
+    const { user } = useAuth()
 
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 flex h-20 md:hidden border-t border-slate-200 dark:border-slate-800 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-xl px-4 pb-2 pt-2">
@@ -11,7 +12,9 @@ function BottomNav() {
             <NavLink
                 to="/"
                 className={({ isActive }) =>
-                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive ? "text-primary" : "text-slate-500 dark:text-slate-400"
+                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive
+                        ? "text-primary"
+                        : "text-slate-500 dark:text-slate-400"
                     }`
                 }
             >
@@ -22,12 +25,13 @@ function BottomNav() {
                 </p>
             </NavLink>
 
-
             {/* Discover */}
             <NavLink
                 to="/discover"
                 className={({ isActive }) =>
-                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive ? "text-primary" : "text-slate-500 dark:text-slate-400"
+                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive
+                        ? "text-primary"
+                        : "text-slate-500 dark:text-slate-400"
                     }`
                 }
             >
@@ -38,12 +42,13 @@ function BottomNav() {
                 </p>
             </NavLink>
 
-
             {/* Favorites */}
             <NavLink
                 to="/favorites"
                 className={({ isActive }) =>
-                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive ? "text-primary" : "text-slate-500 dark:text-slate-400"
+                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive
+                        ? "text-primary"
+                        : "text-slate-500 dark:text-slate-400"
                     }`
                 }
             >
@@ -54,12 +59,13 @@ function BottomNav() {
                 </p>
             </NavLink>
 
-
             {/* Profile / Login */}
             <NavLink
-                to={isLoggedIn ? "/profile" : "/login"}
+                to={user ? "/profile" : "/login"}
                 className={({ isActive }) =>
-                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive ? "text-primary" : "text-slate-500 dark:text-slate-400"
+                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive
+                        ? "text-primary"
+                        : "text-slate-500 dark:text-slate-400"
                     }`
                 }
             >

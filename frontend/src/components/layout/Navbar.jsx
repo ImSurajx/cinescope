@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom"
+import { useAuth } from "../../context/AuthContext"
 
 function Navbar() {
 
-    const isLoggedIn = false
+    const { user, logout } = useAuth()
 
     return (
         <header className="sticky top-0 z-50 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10">
@@ -12,7 +13,6 @@ function Navbar() {
                 {/* Left Section */}
                 <div className="flex items-center gap-8">
 
-                    {/* Logo */}
                     <Link to="/" className="flex items-center gap-2">
                         <span className="material-symbols-outlined text-primary text-3xl">
                             movie
@@ -23,8 +23,6 @@ function Navbar() {
                         </h1>
                     </Link>
 
-
-                    {/* Navigation */}
                     <nav className="hidden md:flex items-center gap-6">
 
                         <Link
@@ -52,30 +50,39 @@ function Navbar() {
 
                 </div>
 
-
                 {/* Right Section */}
                 <div className="flex items-center gap-4">
 
-                    {/* Search Icon (UNCHANGED) */}
+                    {/* Search */}
                     <button className="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full transition-colors">
                         <Link to="/search" className="material-symbols-outlined">
                             search
                         </Link>
                     </button>
 
-
                     {/* Auth UI */}
-                    {isLoggedIn ? (
+                    {user ? (
 
-                        <Link
-                            to="/profile"
-                            className="hidden md:block h-8 w-8 rounded-full bg-primary/20 border border-primary/30 overflow-hidden"
-                        >
-                            <img
-                                alt="Profile"
-                                src="https://i.pravatar.cc/40"
-                            />
-                        </Link>
+                        <div className="flex items-center gap-3">
+
+                            <Link
+                                to="/profile"
+                                className="hidden md:block h-8 w-8 rounded-full bg-primary/20 border border-primary/30 overflow-hidden"
+                            >
+                                <img
+                                    alt="Profile"
+                                    src={user.user_metadata?.avatar_url || "https://i.pravatar.cc/40"}
+                                />
+                            </Link>
+
+                            <button
+                                onClick={logout}
+                                className="hidden md:block text-sm text-slate-400 hover:text-white"
+                            >
+                                Logout
+                            </button>
+
+                        </div>
 
                     ) : (
 
