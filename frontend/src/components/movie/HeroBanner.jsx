@@ -1,42 +1,109 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { fetchMovieTrailer } from "../../services/tmdbApi"
 import TrailerModal from "./TrailerModal"
-
+import { useAuth } from "../../context/AuthContext"
+import { addFavorite, removeFavorite, checkFavorite } from "../../services/favoritesApi"
 
 function HeroBanner({ movie }) {
 
+    const { user } = useAuth()
+
     const [trailerKey, setTrailerKey] = useState(null)
     const [showTrailer, setShowTrailer] = useState(false)
+    const [isFavorite, setIsFavorite] = useState(false)
+    const [loadingFavorite, setLoadingFavorite] = useState(false)
+
+    useEffect(() => {
+
+        async function loadFavoriteState() {
+
+            if (!user || !movie) return
+
+            try {
+
+                const exists = await checkFavorite(movie.id, user.id)
+                setIsFavorite(exists)
+
+            } catch (err) {
+
+                console.error("Favorite check failed:", err)
+
+            }
+
+        }
+
+        loadFavoriteState()
+
+    }, [movie?.id, user])
+
 
     if (!movie) return null
+
 
     const backdrop = movie.backdrop_path
         ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
         : ""
 
+
     async function handleTrailer() {
 
-        const key = await fetchMovieTrailer(movie.id)
+        if (showTrailer || !movie) return
 
-        if (key) {
-            setTrailerKey(key)
-            setShowTrailer(true)
+        try {
+
+            const key = await fetchMovieTrailer(movie.id)
+
+            if (key) {
+                setTrailerKey(key)
+                setShowTrailer(true)
+            }
+
+        } catch (err) {
+
+            console.error("Trailer fetch failed:", err)
+
         }
 
     }
 
-    async function handleTrailer() {
 
-        if (showTrailer) return
+    async function handleFavorite() {
 
-        const key = await fetchMovieTrailer(movie.id)
+        if (!user || !movie) return
 
-        if (key) {
-            setTrailerKey(key)
-            setShowTrailer(true)
+        if (loadingFavorite) return
+
+        setLoadingFavorite(true)
+
+        const newState = !isFavorite
+        setIsFavorite(newState) // optimistic UI
+
+        try {
+
+            if (newState) {
+
+                await addFavorite(movie, user)
+
+            } else {
+
+                await removeFavorite(movie.id, user.id)
+
+            }
+
+        } catch (err) {
+
+            console.error("Favorite action failed:", err)
+
+            setIsFavorite(!newState)
+
+        } finally {
+
+            setLoadingFavorite(false)
+
         }
 
     }
+
 
     return (
         <>
@@ -81,9 +148,24 @@ function HeroBanner({ movie }) {
                                 Watch Trailer
                             </button>
 
-                            <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-8 py-3 rounded-xl font-bold border border-white/20 flex items-center gap-2 transition-transform active:scale-95">
-                                <span className="material-symbols-outlined">add</span>
-                                Add to Favorites
+                            <button
+                                onClick={handleFavorite}
+                                disabled={loadingFavorite}
+                                className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-8 py-3 rounded-xl font-bold border border-white/20 flex items-center gap-2 transition-all"
+                            >
+
+                                <span
+                                    className={`material-symbols-outlined transition-all duration-200 ${isFavorite ? "text-red-500 scale-110" : "text-white"
+                                        }`}
+                                    style={{
+                                        fontVariationSettings: `'FILL' ${isFavorite ? 1 : 0}`
+                                    }}
+                                >
+                                    favorite
+                                </span>
+
+                                {isFavorite ? "Remove Favorite" : "Add to Favorites"}
+
                             </button>
 
                         </div>
@@ -100,8 +182,10 @@ function HeroBanner({ movie }) {
                     onClose={() => setShowTrailer(false)}
                 />
             )}
+
         </>
     )
+
 }
 
 export default HeroBanner
