@@ -1,9 +1,47 @@
+import { useEffect, useState } from "react"
+
 import Navbar from "../components/layout/Navbar"
 import Footer from "../components/layout/Footer"
 import BottomNav from "../components/layout/BottomNav"
 import MovieCard from "../components/movie/MovieCard"
 
+import {
+  fetchPopularMovies,
+  fetchUpcomingMovies
+} from "../services/tmdbApi"
+
 function Discover() {
+
+  const [popular, setPopular] = useState([])
+  const [upcoming, setUpcoming] = useState([])
+
+  useEffect(() => {
+
+    async function loadDiscover() {
+
+      try {
+
+        const [popularData, upcomingData] = await Promise.all([
+          fetchPopularMovies(),
+          fetchUpcomingMovies()
+        ])
+
+        setPopular(popularData)
+        setUpcoming(upcomingData)
+
+      } catch (error) {
+
+        console.error("Discover API Error:", error)
+
+      }
+
+    }
+
+    loadDiscover()
+
+  }, [])
+
+
   return (
     <>
       <Navbar />
@@ -16,47 +54,61 @@ function Discover() {
             Discover Movies
           </h1>
           <p className="text-slate-500 dark:text-slate-400 mt-1">
-            Explore trending and popular movies
+            Explore trending and upcoming movies
           </p>
         </div>
 
-        {/* Movie Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
 
-          <MovieCard
-            title="Inception"
-            year="2010"
-            rating="8.8"
-            image="https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"
-          />
+        {/* Popular Movies */}
+        <div className="mb-12">
 
-          <MovieCard
-            title="Interstellar"
-            year="2014"
-            rating="8.7"
-            image="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
-          />
+          <h2 className="text-xl font-bold mb-6 text-slate-900 dark:text-white">
+            Popular Movies
+          </h2>
 
-          <MovieCard
-            title="The Dark Knight"
-            year="2008"
-            rating="9.0"
-            image="https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
-          />
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
 
-          <MovieCard
-            title="Dune"
-            year="2021"
-            rating="8.0"
-            image="https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg"
-          />
+            {popular.map(movie => (
 
-          <MovieCard
-            title="Blade Runner 2049"
-            year="2017"
-            rating="8.0"
-            image="https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg"
-          />
+              <MovieCard
+                key={movie.id}
+                id={movie.id}
+                title={movie.title}
+                year={movie.release_date?.slice(0, 4)}
+                rating={movie.vote_average?.toFixed(1)}
+                image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              />
+
+            ))}
+
+          </div>
+
+        </div>
+
+
+        {/* Upcoming Movies */}
+        <div>
+
+          <h2 className="text-xl font-bold mb-6 text-slate-900 dark:text-white">
+            Upcoming Movies
+          </h2>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+
+            {upcoming.map(movie => (
+
+              <MovieCard
+                key={movie.id}
+                id={movie.id}
+                title={movie.title}
+                year={movie.release_date?.slice(0, 4)}
+                rating={movie.vote_average?.toFixed(1)}
+                image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              />
+
+            ))}
+
+          </div>
 
         </div>
 

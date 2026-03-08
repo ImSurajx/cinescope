@@ -68,7 +68,7 @@ export async function fetchSimilarMovies(id) {
     return data.results
 }
 
-// RecommendedMovies
+// Recommended Movies
 export async function fetchRecommendedMovies(id) {
     const res = await fetch(
         `${BASE_URL}/movie/${id}/recommendations`,
@@ -79,4 +79,16 @@ export async function fetchRecommendedMovies(id) {
     return data.results
 }
 
+// Upcoming Movies
+export async function fetchUpcomingMovies() {
+
+    const res = await fetch(
+        `${BASE_URL}/movie/upcoming`,
+        { headers }
+    )
+
+    const data = await res.json()
+
+    return data.results
+}
 

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function MovieRow({ title, children }) {
     return (
         <section className="mt-12 px-4 max-w-7xl mx-auto">
@@ -9,12 +10,12 @@ function MovieRow({ title, children }) {
                     {title}
                 </h3>
 
-                <a
+                <Link
+                    to={`/discover?type=${title}`}
                     className="text-primary text-sm font-semibold hover:underline"
-                    href="#"
                 >
                     View All
-                </a>
+                </Link>
             </div>
 
             {/* Movie List */}
