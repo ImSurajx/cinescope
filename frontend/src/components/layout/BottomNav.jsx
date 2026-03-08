@@ -5,7 +5,7 @@ function BottomNav() {
     const isLoggedIn = false
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-50 flex border-t border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark px-4 pb-4 pt-3">
+        <div className="fixed bottom-0 left-0 right-0 z-50 flex h-20 md:hidden border-t border-slate-200 dark:border-slate-800 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-xl px-4 pb-2 pt-2">
 
             {/* Home */}
             <NavLink

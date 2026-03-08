@@ -1,3 +1,12 @@
+import { useEffect, useState } from "react"
+
+import {
+    fetchTrendingMovies,
+    fetchPopularMovies,
+    fetchTopRatedMovies,
+    fetchTrendingTV
+} from "../services/tmdbApi"
+
 import Navbar from "../components/layout/Navbar"
 import HeroBanner from "../components/movie/HeroBanner"
 import MovieCard from "../components/movie/MovieCard"
@@ -5,100 +14,91 @@ import MovieRow from "../components/movie/MovieRow"
 import Footer from "../components/layout/Footer"
 import BottomNav from "../components/layout/BottomNav"
 function Home() {
+    const [trending, setTrending] = useState([])
+    const [popular, setPopular] = useState([])
+    const [topRated, setTopRated] = useState([])
+    const [tvShows, setTvShows] = useState([])
+    useEffect(() => {
+        async function loadMovies() {
+            try {
+                const trendingData = await fetchTrendingMovies()
+                const popularData = await fetchPopularMovies()
+                const topRatedData = await fetchTopRatedMovies()
+                const tvData = await fetchTrendingTV()
+
+                setTrending(trendingData)
+                setPopular(popularData)
+                setTopRated(topRatedData)
+                setTvShows(tvData)
+
+            } catch (error) {
+                console.error("API Error:", error)
+            }
+        }
+
+        loadMovies()
+    }, [])
     return (
         <>
             {/* Sticky Header */}
             <Navbar />
             <main className="pb-24">
                 {/* Hero Section */}
-                <HeroBanner />
+                <HeroBanner movie={trending[0]} />
                 {/* Movie Row: Trending */}
                 <MovieRow title="Trending Now">
 
-                    <MovieCard
-                        title="Oppenheimer"
-                        year="2023"
-                        rating="8.4"
-                        image="https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg"
-                    />
-
-                    <MovieCard
-                        title="Fast X"
-                        year="2023"
-                        rating="7.2"
-                        image="https://image.tmdb.org/t/p/w500/fiVW06jE7z9YnO4trhaMEdclSiC.jpg"
-                    />
-
-                    <MovieCard
-                        title="The Creator"
-                        year="2023"
-                        rating="7.1"
-                        image="https://image.tmdb.org/t/p/w500/vBZ0qvaRxqEhZwl6LWmruJqWE8Z.jpg"
-                    />
+                    {trending.map(movie => (
+                        <MovieCard
+                            key={movie.id}
+                            title={movie.title}
+                            year={movie.release_date?.slice(0, 4)}
+                            rating={movie.vote_average?.toFixed(1)}
+                            image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                        />
+                    ))}
 
                 </MovieRow>
                 {/* Movie Row: Popular */}
                 <MovieRow title="Popular Movies">
 
-                    <MovieCard
-                        title="John Wick 4"
-                        year="2023"
-                        rating="7.9"
-                        image="https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg"
-                    />
+                    {popular.map(movie => (
+                        <MovieCard
+                            key={movie.id}
+                            title={movie.title}
+                            year={movie.release_date?.slice(0, 4)}
+                            rating={movie.vote_average?.toFixed(1)}
+                            image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                        />
+                    ))}
 
-                    <MovieCard
-                        title="The Batman"
-                        year="2022"
-                        rating="8.2"
-                        image="https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
-                    />
+                </MovieRow>
+                {/* Movie Row: Top Rated */}
+                <MovieRow title="Top Rated Movies">
 
-                    <MovieCard
-                        title="Dune"
-                        year="2021"
-                        rating="8.0"
-                        image="https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg"
-                    />
-
-                    <MovieCard
-                        title="Top Gun Maverick"
-                        year="2022"
-                        rating="8.3"
-                        image="https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg"
-                    />
+                    {topRated.map(movie => (
+                        <MovieCard
+                            key={movie.id}
+                            title={movie.title}
+                            year={movie.release_date?.slice(0, 4)}
+                            rating={movie.vote_average?.toFixed(1)}
+                            image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                        />
+                    ))}
 
                 </MovieRow>
                 {/* TV Shows Section */}
                 <MovieRow title="Top TV Shows">
 
-                    <MovieCard
-                        title="The Last of Us"
-                        year="2023"
-                        rating="8.8"
-                        image="https://image.tmdb.org/t/p/w500/uKvVjHNqB5VmOrdxqAt2F7J78ED.jpg"
-                    />
-
-                    <MovieCard
-                        title="Succession"
-                        year="2023"
-                        rating="8.7"
-                        image="https://image.tmdb.org/t/p/w500/7HW47XbkNQ5fiwQFYGWdw9gs144.jpg"
-                    />
-
-                    <MovieCard
-                        title="Stranger Things"
-                        year="2022"
-                        rating="8.6"
-                        image="https://image.tmdb.org/t/p/w500/49WJfeN0moxb9IPfGn8AIqMGskD.jpg"
-                    />
-
-                    <MovieCard
-                        title="The Boys"
-                        year="2024"
-                        rating="8.5"
-                        image="https://image.tmdb.org/t/p/w500/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg"
-                    />
+                    {tvShows.map(show => (
+                        <MovieCard
+                            key={show.id}
+                            title={show.name}
+                            year={show.first_air_date?.slice(0, 4)}
+                            rating={show.vote_average?.toFixed(1)}
+                            image={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
+                        />
+                    ))}
 
                 </MovieRow>
             </main>
