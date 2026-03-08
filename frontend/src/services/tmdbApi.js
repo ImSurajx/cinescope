@@ -34,14 +34,17 @@ export async function fetchTrendingTV() {
     return data.results
 }
 
-// Search Movies
-export async function searchMovies(query) {
+// Search Data
+export async function searchMovies(query, page = 1) {
+
     const res = await fetch(
-        `${BASE_URL}/search/movie?query=${query}`,
+        `${BASE_URL}/search/movie?query=${query}&page=${page}`,
         { headers }
     )
+
     const data = await res.json()
-    return data.results
+
+    return data
 }
 
 // Movie Details
@@ -75,3 +78,5 @@ export async function fetchRecommendedMovies(id) {
     const data = await res.json()
     return data.results
 }
+
+
