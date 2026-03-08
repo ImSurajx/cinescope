@@ -92,3 +92,20 @@ export async function fetchUpcomingMovies() {
     return data.results
 }
 
+// Movie Trailer
+export async function fetchMovieTrailer(id) {
+
+    const res = await fetch(
+        `${BASE_URL}/movie/${id}/videos`,
+        { headers }
+    )
+
+    const data = await res.json()
+
+    const trailer = data.results.find(
+        video => video.type === "Trailer" && video.site === "YouTube"
+    )
+
+    return trailer?.key || null
+
+}
