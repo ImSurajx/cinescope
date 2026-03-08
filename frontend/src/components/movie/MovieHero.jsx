@@ -1,58 +1,76 @@
-function MovieHero({ title, rating, year, runtime, genres, backdrop, poster }) {
+function MovieHero({
+    title,
+    rating,
+    year,
+    runtime,
+    genres,
+    backdrop,
+    poster
+}) {
+
     return (
-        <div className="relative w-full h-[450px]">
+        <section className="relative w-full h-[70vh] min-h-[500px] overflow-hidden">
+
+            {/* Background */}
             <div
                 className="absolute inset-0 bg-cover bg-center"
-                style={{   backgroundImage: `url(${backdrop || "https://via.placeholder.com/1920x1080"})` }}
+                style={{ backgroundImage: `url(${backdrop})` }}
             >
-                <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/40 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-background-dark via-background-dark/20 to-transparent"></div>
             </div>
 
-            <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col md:flex-row gap-6 items-end">
+            {/* Content container (same as HeroBanner) */}
+            <div className="relative h-full max-w-7xl mx-auto px-4 flex items-end pb-12">
 
-                <div className="relative shrink-0 hidden sm:block">
+                <div className="flex gap-8 items-end">
+
+                    {/* Poster */}
                     <img
-                        className="w-40 h-60 object-cover rounded-xl shadow-2xl border-2 border-primary/20"
                         src={poster}
                         alt={title}
+                        className="w-40 md:w-52 rounded-xl shadow-2xl hidden md:block"
                     />
-                </div>
 
-                <div className="flex-1 space-y-3">
+                    {/* Movie Info */}
+                    <div className="max-w-2xl space-y-4">
 
-                    <div className="flex flex-wrap gap-2">
-                        {genres.map((genre, i) => (
-                            <span
-                                key={i}
-                                className="px-2 py-1 rounded bg-slate-800 text-slate-300 text-[10px] font-bold uppercase"
-                            >
-                                {genre}
+                        <h1 className="text-4xl md:text-6xl font-black text-white leading-tight">
+                            {title}
+                        </h1>
+
+                        <div className="flex items-center gap-4 text-slate-300 text-sm font-semibold">
+
+                            <span className="text-primary font-bold">
+                                ⭐ {rating}
                             </span>
-                        ))}
-                    </div>
 
-                    <h1 className="text-4xl md:text-6xl font-bold text-slate-100">
-                        {title}
-                    </h1>
+                            <span>{year}</span>
 
-                    <div className="flex items-center gap-4 text-sm text-slate-300">
+                            <span>{runtime}</span>
 
-                        <div className="flex items-center gap-1">
-                            ⭐
-                            <span className="font-bold text-slate-100">{rating}</span>
-                            <span className="text-slate-400">/10</span>
                         </div>
 
-                        <span className="w-1 h-1 rounded-full bg-slate-500" />
-                        <span>{runtime}</span>
+                        <div className="flex flex-wrap gap-2">
 
-                        <span className="w-1 h-1 rounded-full bg-slate-500" />
-                        <span>{year}</span>
+                            {genres?.map((g, i) => (
+                                <span
+                                    key={i}
+                                    className="px-3 py-1 bg-white/10 border border-white/20 rounded-full text-xs text-white"
+                                >
+                                    {g}
+                                </span>
+                            ))}
+
+                        </div>
 
                     </div>
+
                 </div>
+
             </div>
-        </div>
+
+        </section>
     )
 }
 

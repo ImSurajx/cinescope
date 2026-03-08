@@ -50,6 +50,7 @@ function Home() {
 
                     {trending.map(movie => (
                         <MovieCard
+                            id={movie.id}
                             key={movie.id}
                             title={movie.title}
                             year={movie.release_date?.slice(0, 4)}
@@ -64,6 +65,7 @@ function Home() {
 
                     {popular.map(movie => (
                         <MovieCard
+                            id={movie.id}
                             key={movie.id}
                             title={movie.title}
                             year={movie.release_date?.slice(0, 4)}
@@ -78,6 +80,7 @@ function Home() {
 
                     {topRated.map(movie => (
                         <MovieCard
+                            id={movie.id}
                             key={movie.id}
                             title={movie.title}
                             year={movie.release_date?.slice(0, 4)}
@@ -92,6 +95,7 @@ function Home() {
 
                     {tvShows.map(show => (
                         <MovieCard
+                            id={show.id}
                             key={show.id}
                             title={show.name}
                             year={show.first_air_date?.slice(0, 4)}

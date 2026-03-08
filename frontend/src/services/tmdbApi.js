@@ -1,8 +1,8 @@
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY
+const TOKEN = import.meta.env.VITE_TMDB_API_KEY
 const BASE_URL = "https://api.themoviedb.org/3"
 
 const headers = {
-    Authorization: `Bearer ${API_KEY}`,
+    Authorization: `Bearer ${TOKEN}`,
     "Content-Type": "application/json"
 }
 
@@ -46,7 +46,32 @@ export async function searchMovies(query) {
 
 // Movie Details
 export async function fetchMovieDetails(id) {
-    const res = await fetch(`${BASE_URL}/movie/${id}`, { headers })
+    const res = await fetch(`${BASE_URL}/movie/${id}?language=en-US`, { headers })
     const data = await res.json()
     return data
+}
+
+// Movie Cast
+export async function fetchMovieCredits(id) {
+    const res = await fetch(`${BASE_URL}/movie/${id}/credits`, { headers })
+    const data = await res.json()
+    return data.cast
+}
+
+// Similar Movies
+export async function fetchSimilarMovies(id) {
+    const res = await fetch(`${BASE_URL}/movie/${id}/similar`, { headers })
+    const data = await res.json()
+    return data.results
+}
+
+// RecommendedMovies
+export async function fetchRecommendedMovies(id) {
+    const res = await fetch(
+        `${BASE_URL}/movie/${id}/recommendations`,
+        { headers }
+    )
+
+    const data = await res.json()
+    return data.results
 }

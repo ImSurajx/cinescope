@@ -1,6 +1,7 @@
-function MovieCard({ title, year, rating, image, showFavorite = false }) {
+import { Link } from "react-router-dom";
+function MovieCard({ id, title, year, rating, image, showFavorite = false }) {
   return (
-    <div className="flex flex-col gap-2 group shrink-0 w-[170px] md:w-[190px]">
+    <Link to={`/movie/${id}`} className="flex flex-col gap-2 group shrink-0 w-[170px] md:w-[190px]">
 
       {/* Poster */}
       <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-slate-800">
@@ -36,7 +37,7 @@ function MovieCard({ title, year, rating, image, showFavorite = false }) {
         </div>
       </div>
 
-    </div>
+    </Link>
   )
 }
 
