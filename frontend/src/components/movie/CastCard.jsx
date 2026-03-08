@@ -1,6 +1,6 @@
 function CastCard({ name, character, image }) {
   return (
-    <div className="flex flex-col gap-2 shrink-0 w-24 items-start">
+    <div className="flex flex-col gap-2 flex-shrink-0 w-24 items-start">
       
       <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary/20">
         <img

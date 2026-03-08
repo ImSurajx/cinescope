@@ -89,29 +89,24 @@ function MovieDetails() {
                 <HeroBanner movie={movie} />
 
                 {/* Container same as Home HeroBanner */}
-                <div className="max-w-7xl mx-auto px-4">
+                <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4 -mx-4 px-4">
 
-                    <main className="space-y-10">
+                    <section className="mt-12 px-4 max-w-7xl mx-auto">
 
+                        <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4 -mx-4 px-4">
 
-                        <section className="space-y-4">
-                            <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+                            {cast.map(actor => (
+                                <CastCard
+                                    key={actor.id}
+                                    name={actor.name}
+                                    character={actor.character}
+                                    image={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
+                                />
+                            ))}
 
-                                {cast.map(actor => (
+                        </div>
 
-                                    <CastCard
-                                        key={actor.id}
-                                        name={actor.name}
-                                        character={actor.character}
-                                        image={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
-                                    />
-
-                                ))}
-
-                            </div>
-                        </section>
-
-                    </main>
+                    </section>
 
                 </div>
 
