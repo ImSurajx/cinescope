@@ -15,16 +15,20 @@ function HeroBanner({ movie }) {
     const [isFavorite, setIsFavorite] = useState(false)
     const [loadingFavorite, setLoadingFavorite] = useState(false)
 
+    // prevent repeated DB checks
+    const [favoriteChecked, setFavoriteChecked] = useState(false)
+
     useEffect(() => {
 
         async function loadFavoriteState() {
 
-            if (!user || !movie) return
+            if (!user || !movie || favoriteChecked) return
 
             try {
 
                 const exists = await checkFavorite(movie.id, user.id)
                 setIsFavorite(exists)
+                setFavoriteChecked(true)
 
             } catch (err) {
 
@@ -37,6 +41,12 @@ function HeroBanner({ movie }) {
         loadFavoriteState()
 
     }, [movie?.id, user])
+
+
+    // reset check when movie changes
+    useEffect(() => {
+        setFavoriteChecked(false)
+    }, [movie?.id])
 
 
     if (!movie) return null
@@ -138,7 +148,7 @@ function HeroBanner({ movie }) {
                         </div>
 
 
-                        {/* Responsive Layout */}
+                        {/* Layout */}
                         <div className="flex flex-col md:flex-row items-start gap-6">
 
                             {/* Poster */}
@@ -160,7 +170,7 @@ function HeroBanner({ movie }) {
                             </motion.div>
 
 
-                            {/* Movie Content */}
+                            {/* Content */}
                             <div className="space-y-4">
 
                                 <h2 className="text-3xl md:text-6xl font-black text-white leading-tight">

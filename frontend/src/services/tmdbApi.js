@@ -6,103 +6,159 @@ const headers = {
     "Content-Type": "application/json"
 }
 
+// CACHE STORAGE
+const cache = {}
+
+// CACHE TTL (15 minutes)
+const CACHE_TTL = 1000 * 60 * 15
+
+async function fetchWithCache(url) {
+
+    const now = Date.now()
+
+    const cached = cache[url]
+
+    if (cached && now - cached.time < CACHE_TTL) {
+        return cached.data
+    }
+
+    try {
+
+        const res = await fetch(url, { headers })
+
+        if (!res.ok) {
+            throw new Error(`TMDB error ${res.status}`)
+        }
+
+        const data = await res.json()
+
+        cache[url] = {
+            data,
+            time: now
+        }
+
+        return data
+
+    } catch (err) {
+
+        console.error("TMDB API error:", err)
+
+        // don't cache failed responses
+        return { results: [] }
+
+    }
+
+}
+
+
 // Trending Movies
 export async function fetchTrendingMovies() {
-    const res = await fetch(`${BASE_URL}/trending/movie/day`, { headers })
-    const data = await res.json()
-    return data.results
+
+    const data = await fetchWithCache(`${BASE_URL}/trending/movie/day`)
+
+    return data.results || []
+
 }
+
 
 // Popular Movies
 export async function fetchPopularMovies() {
-    const res = await fetch(`${BASE_URL}/movie/popular`, { headers })
-    const data = await res.json()
-    return data.results
+
+    const data = await fetchWithCache(`${BASE_URL}/movie/popular`)
+
+    return data.results || []
+
 }
+
 
 // Top Rated Movies
 export async function fetchTopRatedMovies() {
-    const res = await fetch(`${BASE_URL}/movie/top_rated`, { headers })
-    const data = await res.json()
-    return data.results
+
+    const data = await fetchWithCache(`${BASE_URL}/movie/top_rated`)
+
+    return data.results || []
+
 }
+
 
 // Trending TV Shows
 export async function fetchTrendingTV() {
-    const res = await fetch(`${BASE_URL}/trending/tv/day`, { headers })
-    const data = await res.json()
-    return data.results
+
+    const data = await fetchWithCache(`${BASE_URL}/trending/tv/day`)
+
+    return data.results || []
+
 }
 
-// Search Data
+
+// Search Movies
 export async function searchMovies(query, page = 1) {
 
-    const res = await fetch(
-        `${BASE_URL}/search/movie?query=${query}&page=${page}`,
-        { headers }
-    )
+    const url = `${BASE_URL}/search/movie?query=${encodeURIComponent(query)}&page=${page}`
 
-    const data = await res.json()
+    const data = await fetchWithCache(url)
 
     return data
+
 }
+
 
 // Movie Details
 export async function fetchMovieDetails(id) {
-    const res = await fetch(`${BASE_URL}/movie/${id}?language=en-US`, { headers })
-    const data = await res.json()
+
+    const data = await fetchWithCache(`${BASE_URL}/movie/${id}?language=en-US`)
+
     return data
+
 }
+
 
 // Movie Cast
 export async function fetchMovieCredits(id) {
-    const res = await fetch(`${BASE_URL}/movie/${id}/credits`, { headers })
-    const data = await res.json()
-    return data.cast
+
+    const data = await fetchWithCache(`${BASE_URL}/movie/${id}/credits`)
+
+    return data.cast || []
+
 }
+
 
 // Similar Movies
 export async function fetchSimilarMovies(id) {
-    const res = await fetch(`${BASE_URL}/movie/${id}/similar`, { headers })
-    const data = await res.json()
-    return data.results
+
+    const data = await fetchWithCache(`${BASE_URL}/movie/${id}/similar`)
+
+    return data.results || []
+
 }
+
 
 // Recommended Movies
 export async function fetchRecommendedMovies(id) {
-    const res = await fetch(
-        `${BASE_URL}/movie/${id}/recommendations`,
-        { headers }
-    )
 
-    const data = await res.json()
-    return data.results
+    const data = await fetchWithCache(`${BASE_URL}/movie/${id}/recommendations`)
+
+    return data.results || []
+
 }
+
 
 // Upcoming Movies
 export async function fetchUpcomingMovies() {
 
-    const res = await fetch(
-        `${BASE_URL}/movie/upcoming`,
-        { headers }
-    )
+    const data = await fetchWithCache(`${BASE_URL}/movie/upcoming`)
 
-    const data = await res.json()
+    return data.results || []
 
-    return data.results
 }
+
 
 // Movie Trailer
 export async function fetchMovieTrailer(id) {
 
-    const res = await fetch(
-        `${BASE_URL}/movie/${id}/videos`,
-        { headers }
-    )
+    const data = await fetchWithCache(`${BASE_URL}/movie/${id}/videos`)
 
-    const data = await res.json()
-
-    const trailer = data.results.find(
+    const trailer = (data.results || []).find(
         video => video.type === "Trailer" && video.site === "YouTube"
     )
 

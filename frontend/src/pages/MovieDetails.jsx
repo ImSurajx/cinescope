@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useParams } from "react-router-dom"
 import { addToWatchHistory } from "../services/watchHistoryApi"
 import { useAuth } from "../context/AuthContext"
@@ -32,13 +32,18 @@ function MovieDetails() {
 
     const { user } = useAuth()
 
-    async function loadMovie() {
+    const loadMovie = useCallback(async () => {
 
         try {
 
             setLoading(true)
 
-            const [movieData, castData, similarData, recommendedData] = await Promise.all([
+            const [
+                movieData,
+                castData,
+                similarData,
+                recommendedData
+            ] = await Promise.all([
                 fetchMovieDetails(id),
                 fetchMovieCredits(id),
                 fetchSimilarMovies(id),
@@ -60,11 +65,12 @@ function MovieDetails() {
 
         }
 
-    }
+    }, [id])
+
 
     useEffect(() => {
         loadMovie()
-    }, [id])
+    }, [loadMovie])
 
 
     useEffect(() => {
@@ -78,15 +84,13 @@ function MovieDetails() {
 
     useEffect(() => {
 
-        if (movie && user) {
+        if (!movie || !user) return
 
-            addToWatchHistory({
-                id: movie.id,
-                title: movie.title,
-                poster_path: movie.poster_path
-            }, user)
-
-        }
+        addToWatchHistory({
+            id: movie.id,
+            title: movie.title,
+            poster_path: movie.poster_path
+        }, user)
 
     }, [movie, user])
 
@@ -120,14 +124,11 @@ function MovieDetails() {
         <>
             <Navbar />
 
-            {/* SAME STRUCTURE AS HOME */}
             <main className="pb-24">
 
-                {/* Hero */}
                 <HeroBanner movie={movie} />
 
 
-                {/* Cast */}
                 {cast.length > 0 && (
 
                     <section className="mt-12 px-4 max-w-7xl mx-auto">
@@ -161,7 +162,6 @@ function MovieDetails() {
                 )}
 
 
-                {/* Similar Movies */}
                 {similar.length > 0 && (
 
                     <MovieRow title="You Might Also Like">
@@ -184,7 +184,6 @@ function MovieDetails() {
                 )}
 
 
-                {/* Recommendations */}
                 {recommended.length > 0 && (
 
                     <MovieRow title="Recommendations">

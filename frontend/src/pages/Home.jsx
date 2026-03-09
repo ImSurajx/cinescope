@@ -31,19 +31,27 @@ function Home() {
 
         async function loadMovies() {
 
-            setLoading(true)
-
             try {
 
-                const trendingData = await fetchTrendingMovies()
-                const popularData = await fetchPopularMovies()
-                const topRatedData = await fetchTopRatedMovies()
-                const tvData = await fetchTrendingTV()
+                setLoading(true)
 
-                setTrending(trendingData)
-                setPopular(popularData)
-                setTopRated(topRatedData)
-                setTvShows(tvData)
+                // 🚀 Run all APIs in parallel
+                const [
+                    trendingData,
+                    popularData,
+                    topRatedData,
+                    tvData
+                ] = await Promise.all([
+                    fetchTrendingMovies(),
+                    fetchPopularMovies(),
+                    fetchTopRatedMovies(),
+                    fetchTrendingTV()
+                ])
+
+                setTrending(trendingData || [])
+                setPopular(popularData || [])
+                setTopRated(topRatedData || [])
+                setTvShows(tvData || [])
 
             } catch (error) {
 
@@ -57,7 +65,10 @@ function Home() {
 
         }
 
-        loadMovies()
+        // prevent refetch if already loaded
+        if (!trending.length) {
+            loadMovies()
+        }
 
     }, [])
 

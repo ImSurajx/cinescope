@@ -98,6 +98,7 @@ function MovieCard({ id, title, year, rating, image, showFavorite = false, onRem
             <img
               src={image}
               alt={title}
+              loading="lazy"
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
 

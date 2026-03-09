@@ -190,7 +190,14 @@ function Profile() {
                                 <WatchHistoryCard
                                     key={movie.id}
                                     title={movie.title}
-                                    image={`https://image.tmdb.org/t/p/w500${movie.poster}`}
+                                    image={
+                                        movie.poster
+                                            ? `https://image.tmdb.org/t/p/w500${movie.poster}`
+                                            : movie.poster_path
+                                                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                                                : null
+                                    }
+                                    fallbackLetter={movie.title?.charAt(0)}
                                     progress={movie.progress}
                                 />
 
