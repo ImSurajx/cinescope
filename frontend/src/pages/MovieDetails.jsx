@@ -14,9 +14,7 @@ import Navbar from "../components/layout/Navbar"
 import Footer from "../components/layout/Footer"
 import BottomNav from "../components/layout/BottomNav"
 
-import HeroBanner from "../components/movie/HeroBanner";
-import MovieActions from "../components/movie/MovieActions"
-import PlotSummary from "../components/movie/PlotSummary"
+import HeroBanner from "../components/movie/HeroBanner"
 
 import CastCard from "../components/movie/CastCard"
 import MovieRow from "../components/movie/MovieRow"
@@ -31,7 +29,9 @@ function MovieDetails() {
     const [cast, setCast] = useState([])
     const [similar, setSimilar] = useState([])
     const [recommended, setRecommended] = useState([])
-    const { user } = useAuth();
+
+    const { user } = useAuth()
+
     async function loadMovie() {
 
         try {
@@ -66,6 +66,16 @@ function MovieDetails() {
         loadMovie()
     }, [id])
 
+
+    useEffect(() => {
+
+        if (movie) {
+            window.scrollTo(0, 0)
+        }
+
+    }, [movie])
+
+
     useEffect(() => {
 
         if (movie && user) {
@@ -80,17 +90,29 @@ function MovieDetails() {
 
     }, [movie, user])
 
+
     if (loading) {
+
         return (
             <>
                 <Navbar />
-                <div className="min-h-screen flex items-center justify-center text-white">
-                    <span className="animate-pulse text-lg font-bold">
-                        Loading Movie...
-                    </span>
+
+                <div className="min-h-screen flex items-center justify-center">
+
+                    <div className="flex flex-col items-center gap-4">
+
+                        <div className="w-12 h-12 border-4 border-gray-700 border-t-red-500 rounded-full animate-spin"></div>
+
+                        <p className="text-gray-400 text-sm">
+                            Loading movie...
+                        </p>
+
+                    </div>
+
                 </div>
             </>
         )
+
     }
 
 
@@ -98,36 +120,49 @@ function MovieDetails() {
         <>
             <Navbar />
 
-            <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+            {/* SAME STRUCTURE AS HOME */}
+            <main className="pb-24">
 
                 {/* Hero */}
                 <HeroBanner movie={movie} />
 
-                {/* Container same as Home HeroBanner */}
-                <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4 -mx-4 px-4">
+
+                {/* Cast */}
+                {cast.length > 0 && (
 
                     <section className="mt-12 px-4 max-w-7xl mx-auto">
 
-                        <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4 -mx-4 px-4">
+                        <h2 className="text-xl font-bold mb-6">
+                            Cast
+                        </h2>
+
+                        <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4">
 
                             {cast.map(actor => (
+
                                 <CastCard
                                     key={actor.id}
                                     name={actor.name}
                                     character={actor.character}
-                                    image={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
+                                    image={
+                                        actor.profile_path
+                                            ? `https://image.tmdb.org/t/p/w500${actor.profile_path}`
+                                            : null
+                                    }
+                                    fallbackLetter={actor.name?.charAt(0)}
                                 />
+
                             ))}
 
                         </div>
 
                     </section>
 
-                </div>
+                )}
 
 
-                {/* Movie rows remain full width like Home */}
-                <main className="max-w-7xl mx-auto px-4 space-y-10">
+                {/* Similar Movies */}
+                {similar.length > 0 && (
 
                     <MovieRow title="You Might Also Like">
 
@@ -146,8 +181,13 @@ function MovieDetails() {
 
                     </MovieRow>
 
+                )}
 
-                    <MovieRow title="Recommend">
+
+                {/* Recommendations */}
+                {recommended.length > 0 && (
+
+                    <MovieRow title="Recommendations">
 
                         {recommended.map(movie => (
 
@@ -164,12 +204,12 @@ function MovieDetails() {
 
                     </MovieRow>
 
-                </main>
+                )}
 
-                <Footer />
-                <BottomNav />
+            </main>
 
-            </div>
+            <Footer />
+            <BottomNav />
         </>
     )
 }

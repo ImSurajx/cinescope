@@ -9,6 +9,9 @@ function MovieCard({ id, title, year, rating, image, showFavorite = false, onRem
   const { user } = useAuth()
   const [isFavorite, setIsFavorite] = useState(false)
 
+  const hasPoster = image && !image.includes("null")
+  const firstLetter = title?.charAt(0)?.toUpperCase()
+
   useEffect(() => {
 
     async function loadFavorite() {
@@ -48,7 +51,7 @@ function MovieCard({ id, title, year, rating, image, showFavorite = false, onRem
       if (newState) {
 
         await addFavorite(
-          { id, title, poster_path: image.split("/w500")[1] },
+          { id, title, poster_path: image?.split("/w500")[1] },
           user
         )
 
@@ -65,7 +68,6 @@ function MovieCard({ id, title, year, rating, image, showFavorite = false, onRem
     } catch (error) {
 
       console.error("Favorite action failed:", error)
-
       setIsFavorite(!newState)
 
     }
@@ -89,13 +91,23 @@ function MovieCard({ id, title, year, rating, image, showFavorite = false, onRem
       >
 
         {/* Poster */}
-        <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-slate-800 group-hover:shadow-2xl group-hover:shadow-primary/20">
+        <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-slate-800 group-hover:shadow-2xl group-hover:shadow-primary/20 flex items-center justify-center">
 
-          <img
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+          {hasPoster ? (
+
+            <img
+              src={image}
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+
+          ) : (
+
+            <div className="flex items-center justify-center w-full h-full text-white text-4xl font-bold bg-slate-900">
+              {firstLetter}
+            </div>
+
+          )}
 
           {/* Rating */}
           {rating && (
@@ -114,13 +126,8 @@ function MovieCard({ id, title, year, rating, image, showFavorite = false, onRem
 
               <motion.span
                 className="material-symbols-outlined text-[20px]"
-                animate={{
-                  scale: isFavorite ? 1.3 : 1
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 400
-                }}
+                animate={{ scale: isFavorite ? 1.3 : 1 }}
+                transition={{ type: "spring", stiffness: 400 }}
                 style={{
                   fontVariationSettings: `'FILL' ${isFavorite ? 1 : 0}`
                 }}
