@@ -1,20 +1,48 @@
-# CineScope 🎬
+# 🎬 CineScope
 
-CineScope is a movie discovery platform where users can explore trending movies, search for films in real time, watch trailers, and manage their movie preferences.
+**CineScope** is a modern movie discovery platform that allows users to explore trending films, discover popular content, watch trailers, and manage their personal movie preferences.
 
-This project is being built as part of a **Full-Stack development challenge / hackathon**.
+The project was built as part of a **48-hour full-stack hackathon challenge**, focusing on performance, modern UI, and real-world application architecture.
 
 ---
 
-## 🚀 Tech Stack
+# 🌐 Live Features
 
-### Frontend
-- React (Vite)
-- TailwindCSS
-- React Router
-- TMDB API
+CineScope provides a clean and interactive movie browsing experience with features commonly found in modern streaming platforms.
 
-### Backend (Planned)
+### 🔍 Movie Discovery
+- Browse **Trending Movies**
+- Explore **Popular Movies**
+- Discover **Top Rated Films**
+- Browse **Trending TV Shows**
+
+### 🎥 Movie Experience
+- View detailed **Movie Information**
+- Watch **Official Trailers**
+- Explore **Cast Information**
+- Get **Recommendations & Similar Movies**
+
+### ⭐ User Features
+- **Favorites System**
+- **Watch History Tracking**
+- **Real-time Search**
+- **Responsive UI for Mobile & Desktop**
+
+---
+
+# ⚙️ Tech Stack
+
+## Frontend
+- **React (Vite)** — Fast modern frontend framework
+- **TailwindCSS** — Utility-first styling
+- **React Router** — Client-side routing
+- **Framer Motion** — Smooth UI animations
+
+## APIs & Services
+- **TMDB API** — Movie and TV data
+- **Supabase** — Authentication & database services
+
+## Backend *(Planned Expansion)*
 - Node.js
 - Express.js
 - MongoDB
@@ -22,41 +50,47 @@ This project is being built as part of a **Full-Stack development challenge / ha
 
 ---
 
-## ✨ Features
+# 📡 API
 
-- Browse **Trending Movies**
-- Explore **Popular Movies & TV Shows**
-- **Real-time Search**
-- **Trailer Preview**
-- **Responsive UI**
-- **Infinite Scrolling**
-- **Favorites System**
-- **Watch History**
+CineScope uses the **TMDB (The Movie Database) API** to fetch movie, TV show, cast, and trailer data.
+
+🔗 https://www.themoviedb.org/
 
 ---
-## 🌐 API
-This project uses the TMDB (The Movie Database) API to fetch movie and TV show data.
+
+# 🧠 Key Implementations
+
+Some important architectural features implemented in the project:
+
+- **API response caching** to reduce TMDB calls
+- **Optimized parallel data fetching** using `Promise.all`
+- **Lazy image loading for performance**
+- **Reusable component architecture**
+- **Responsive design for all screen sizes**
 
 ---
-## 🎯 Project Goal
-The goal of this project is to build a real-world full-stack movie platform using modern technologies and best practices.
+
+# 🎯 Project Goal
+
+The goal of CineScope is to simulate a **real-world streaming discovery platform** while practicing:
+
+- Modern React architecture
+- API integration
+- Performance optimization
+- Scalable component design
+- Full-stack application structure
 
 ---
-## 📌 Status
-🚧 Currently under development as part of a 48-hour hackathon build.
 
+# 🚧 Project Status
 
-## 📦 Installation
+Currently built during a **48-hour hackathon**.
 
-Clone the repository and run the project locally.
+Future improvements may include:
 
-```bash
-git clone https://github.com/YOUR_USERNAME/cinescope.git
-cd cinescope
-npm install
-npm run dev
-```
+- User ratings
+- Personalized recommendations
+- Full backend API
+- Social features
+- Watchlists & collections
 
---- 
-## 📄 License
-This project is open source and available under the MIT License.
