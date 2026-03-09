@@ -103,112 +103,114 @@ function HeroBanner({ movie }) {
 
     return (
         <>
-            <section className="relative w-full h-[70vh] min-h-[500px] overflow-hidden">
+            <section className="relative w-full min-h-[600px] overflow-hidden pt-28 md:pt-32">
 
-                {/* Background Image */}
+                {/* Background */}
                 <motion.div
-                    initial={{ scale: 1.1, opacity: 0 }}
+                    initial={{ scale: 1.15, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 1.2 }}
-                    className="absolute inset-0 bg-cover bg-center"
+                    transition={{ duration: 1.5 }}
+                    className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat"
                     style={{ backgroundImage: `url(${backdrop})` }}
                 >
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/40 to-transparent"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-background-dark via-background-dark/20 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/50 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-background-dark via-background-dark/30 to-transparent"></div>
 
                 </motion.div>
 
 
-                <div className="relative h-full max-w-7xl mx-auto px-4 flex flex-col justify-end pb-12">
+                <div className="relative max-w-7xl mx-auto px-4 flex flex-col justify-end pb-16">
 
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.7, delay: 0.3 }}
-                        className="max-w-2xl space-y-4"
+                        transition={{ duration: 0.7 }}
+                        className="space-y-6 max-w-4xl"
                     >
 
-                        {/* Tag */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.5 }}
-                            className="flex items-center gap-2 text-primary font-bold tracking-wider uppercase text-sm"
-                        >
+                        {/* Trending */}
+                        <div className="flex items-center gap-2 text-primary font-bold tracking-wider uppercase text-sm">
                             <span className="material-symbols-outlined text-sm">
                                 trending_up
                             </span>
                             Trending Now
-                        </motion.div>
+                        </div>
 
 
-                        {/* Title */}
-                        <motion.h2
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.6 }}
-                            className="text-5xl md:text-7xl font-black text-white leading-tight"
-                        >
-                            {movie.title}
-                        </motion.h2>
+                        {/* Responsive Layout */}
+                        <div className="flex flex-col md:flex-row items-start gap-6">
 
-
-                        {/* Overview */}
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.8 }}
-                            className="text-lg text-slate-300 line-clamp-3"
-                        >
-                            {movie.overview}
-                        </motion.p>
-
-
-                        {/* Buttons */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 15 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 1 }}
-                            className="flex flex-wrap gap-4 pt-4"
-                        >
-
-                            <motion.button
+                            {/* Poster */}
+                            <motion.div
                                 whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={handleTrailer}
-                                className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-2"
-                            >
-                                <span className="material-symbols-outlined">
-                                    play_arrow
-                                </span>
-                                Watch Trailer
-                            </motion.button>
-
-
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={handleFavorite}
-                                disabled={loadingFavorite}
-                                className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-8 py-3 rounded-xl font-bold border border-white/20 flex items-center gap-2 transition-all"
+                                className="w-[150px] md:w-[200px] flex-shrink-0 rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-black/40 backdrop-blur-md"
                             >
 
-                                <span
-                                    className={`material-symbols-outlined transition-all duration-200 ${isFavorite ? "text-red-500 scale-110" : "text-white"
-                                        }`}
-                                    style={{
-                                        fontVariationSettings: `'FILL' ${isFavorite ? 1 : 0}`
-                                    }}
-                                >
-                                    favorite
-                                </span>
+                                <img
+                                    src={
+                                        movie.poster_path
+                                            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                                            : "/no-poster.png"
+                                    }
+                                    alt={movie.title}
+                                    className="w-full h-full object-cover"
+                                />
 
-                                {isFavorite ? "Remove Favorite" : "Add to Favorites"}
+                            </motion.div>
 
-                            </motion.button>
 
-                        </motion.div>
+                            {/* Movie Content */}
+                            <div className="space-y-4">
+
+                                <h2 className="text-3xl md:text-6xl font-black text-white leading-tight">
+                                    {movie.title}
+                                </h2>
+
+
+                                <p className="text-base md:text-lg text-slate-300 line-clamp-3 max-w-xl">
+                                    {movie.overview}
+                                </p>
+
+
+                                {/* Buttons */}
+                                <div className="flex flex-col sm:flex-row gap-4 pt-2">
+
+                                    <button
+                                        onClick={handleTrailer}
+                                        className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl font-bold flex items-center justify-center gap-2"
+                                    >
+                                        <span className="material-symbols-outlined">
+                                            play_arrow
+                                        </span>
+                                        Watch Trailer
+                                    </button>
+
+
+                                    <button
+                                        onClick={handleFavorite}
+                                        disabled={loadingFavorite}
+                                        className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-8 py-3 rounded-xl font-bold border border-white/20 flex items-center justify-center gap-2"
+                                    >
+
+                                        <span
+                                            className={`material-symbols-outlined ${isFavorite ? "text-red-500" : "text-white"}`}
+                                            style={{
+                                                fontVariationSettings: `'FILL' ${isFavorite ? 1 : 0}`
+                                            }}
+                                        >
+                                            favorite
+                                        </span>
+
+                                        {isFavorite ? "Remove Favorite" : "Add to Favorites"}
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
 
                     </motion.div>
 
