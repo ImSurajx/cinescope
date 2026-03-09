@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
+import { pageMotion } from "../animations/pageMotion"
+
+import SkeletonCard from "../components/ui/SkeletonCard"
 
 import {
     fetchTrendingMovies,
@@ -13,14 +17,24 @@ import MovieCard from "../components/movie/MovieCard"
 import MovieRow from "../components/movie/MovieRow"
 import Footer from "../components/layout/Footer"
 import BottomNav from "../components/layout/BottomNav"
+
 function Home() {
+
     const [trending, setTrending] = useState([])
     const [popular, setPopular] = useState([])
     const [topRated, setTopRated] = useState([])
     const [tvShows, setTvShows] = useState([])
+
+    const [loading, setLoading] = useState(true)
+
     useEffect(() => {
+
         async function loadMovies() {
+
+            setLoading(true)
+
             try {
+
                 const trendingData = await fetchTrendingMovies()
                 const popularData = await fetchPopularMovies()
                 const topRatedData = await fetchTopRatedMovies()
@@ -32,87 +46,141 @@ function Home() {
                 setTvShows(tvData)
 
             } catch (error) {
+
                 console.error("API Error:", error)
+
+            } finally {
+
+                setLoading(false)
+
             }
+
         }
 
         loadMovies()
+
     }, [])
+
+
     return (
-        <>
-            {/* Sticky Header */}
+
+        <motion.div
+            variants={pageMotion}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+        >
+
             <Navbar />
+
             <main className="pb-24">
+
                 {/* Hero Section */}
-                <HeroBanner movie={trending[0]} />
-                {/* Movie Row: Trending */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <HeroBanner movie={trending?.[0]} />
+                </motion.div>
+
+
+                {/* Trending */}
                 <MovieRow title="Trending Now">
 
-                    {trending.map(movie => (
-                        <MovieCard
-                            id={movie.id}
-                            key={movie.id}
-                            title={movie.title}
-                            year={movie.release_date?.slice(0, 4)}
-                            rating={movie.vote_average?.toFixed(1)}
-                            image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                        />
-                    ))}
+                    {loading
+                        ? Array.from({ length: 10 }).map((_, i) => (
+                            <SkeletonCard key={i} />
+                        ))
+                        : trending.map(movie => (
+                            <MovieCard
+                                key={movie.id}
+                                id={movie.id}
+                                title={movie.title}
+                                year={movie.release_date?.slice(0, 4)}
+                                rating={movie.vote_average?.toFixed(1)}
+                                image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                            />
+                        ))
+                    }
 
                 </MovieRow>
-                {/* Movie Row: Popular */}
+
+
+                {/* Popular */}
                 <MovieRow title="Popular Movies">
 
-                    {popular.map(movie => (
-                        <MovieCard
-                            id={movie.id}
-                            key={movie.id}
-                            title={movie.title}
-                            year={movie.release_date?.slice(0, 4)}
-                            rating={movie.vote_average?.toFixed(1)}
-                            image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                        />
-                    ))}
+                    {loading
+                        ? Array.from({ length: 10 }).map((_, i) => (
+                            <SkeletonCard key={i} />
+                        ))
+                        : popular.map(movie => (
+                            <MovieCard
+                                key={movie.id}
+                                id={movie.id}
+                                title={movie.title}
+                                year={movie.release_date?.slice(0, 4)}
+                                rating={movie.vote_average?.toFixed(1)}
+                                image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                            />
+                        ))
+                    }
 
                 </MovieRow>
-                {/* Movie Row: Top Rated */}
+
+
+                {/* Top Rated */}
                 <MovieRow title="Top Rated Movies">
 
-                    {topRated.map(movie => (
-                        <MovieCard
-                            id={movie.id}
-                            key={movie.id}
-                            title={movie.title}
-                            year={movie.release_date?.slice(0, 4)}
-                            rating={movie.vote_average?.toFixed(1)}
-                            image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                        />
-                    ))}
+                    {loading
+                        ? Array.from({ length: 10 }).map((_, i) => (
+                            <SkeletonCard key={i} />
+                        ))
+                        : topRated.map(movie => (
+                            <MovieCard
+                                key={movie.id}
+                                id={movie.id}
+                                title={movie.title}
+                                year={movie.release_date?.slice(0, 4)}
+                                rating={movie.vote_average?.toFixed(1)}
+                                image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                            />
+                        ))
+                    }
 
                 </MovieRow>
-                {/* TV Shows Section */}
+
+
+                {/* TV Shows */}
                 <MovieRow title="Top TV Shows">
 
-                    {tvShows.map(show => (
-                        <MovieCard
-                            id={show.id}
-                            key={show.id}
-                            title={show.name}
-                            year={show.first_air_date?.slice(0, 4)}
-                            rating={show.vote_average?.toFixed(1)}
-                            image={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
-                        />
-                    ))}
+                    {loading
+                        ? Array.from({ length: 10 }).map((_, i) => (
+                            <SkeletonCard key={i} />
+                        ))
+                        : tvShows.map(show => (
+                            <MovieCard
+                                key={show.id}
+                                id={show.id}
+                                title={show.name}
+                                year={show.first_air_date?.slice(0, 4)}
+                                rating={show.vote_average?.toFixed(1)}
+                                image={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
+                            />
+                        ))
+                    }
 
                 </MovieRow>
+
             </main>
-            {/* Footer */}
+
             <Footer />
-            {/* Mobile Bottom Navigation */}
             <BottomNav />
-        </>
+
+        </motion.div>
 
     )
+
 }
 
 export default Home

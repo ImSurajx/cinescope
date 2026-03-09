@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, useLocation } from "react-router-dom"
+import { AnimatePresence } from "framer-motion"
 
 import Home from "./pages/Home"
 import Discover from "./pages/Discover"
@@ -14,49 +15,51 @@ import AdminDashboard from "./pages/admin/AdminDashboard"
 import ProtectedRoute from "./components/auth/ProtectedRoute"
 
 function App() {
+
+  const location = useLocation()
+
   return (
-    <Routes>
 
-      {/* Main Pages */}
-      <Route path="/" element={<Home />} />
-      <Route path="/discover" element={<Discover />} />
-      <Route path="/search" element={<SearchResults />} />
-      <Route path="/movie/:id" element={<MovieDetails />} />
+    <AnimatePresence mode="wait">
 
-      {/* Protected Pages */}
-      <Route
-        path="/favorites"
-        element={
-          <ProtectedRoute>
-            <Favorites />
-          </ProtectedRoute>
-        }
-      />
+      <Routes location={location} key={location.pathname}>
 
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        }
-      />
+        {/* Main Pages */}
+        <Route path="/" element={<Home />} />
+        <Route path="/discover" element={<Discover />} />
+        <Route path="/search" element={<SearchResults />} />
+        <Route path="/movie/:id" element={<MovieDetails />} />
 
-      {/* Auth */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+        {/* Protected Pages */}
+        <Route
+          path="/favorites"
+          element={
+            <ProtectedRoute>
+              <Favorites />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Admin */}
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute>
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
 
-    </Routes>
+        {/* Auth */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* Admin */}
+        <Route path="/admin" element={<AdminDashboard />} />
+
+      </Routes>
+
+    </AnimatePresence>
+
   )
 }
 

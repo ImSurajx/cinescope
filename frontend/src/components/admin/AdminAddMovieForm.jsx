@@ -1,4 +1,78 @@
-function AdminAddMovieForm() {
+import { useState, useEffect } from "react"
+import { supabase } from "../../lib/supabase"
+
+function AdminAddMovieForm({ setMovies, editingMovie, setEditingMovie }) {
+
+  const [title, setTitle] = useState("")
+  const [poster, setPoster] = useState("")
+  const [genre, setGenre] = useState("")
+  const [releaseDate, setReleaseDate] = useState("")
+
+  useEffect(() => {
+
+    if (editingMovie) {
+
+      setTitle(editingMovie.title || "")
+      setPoster(editingMovie.poster || "")
+      setGenre(editingMovie.genre || "")
+      setReleaseDate(editingMovie.release_date || "")
+
+    }
+
+  }, [editingMovie])
+
+
+  async function handleSubmit(e) {
+
+    e.preventDefault()
+
+    if (editingMovie) {
+
+      const { error } = await supabase
+        .from("movies")
+        .update({
+          title,
+          poster,
+          genre,
+          release_date: releaseDate
+        })
+        .eq("id", editingMovie.id)
+
+      if (!error) {
+
+        setMovies(prev =>
+          prev.map(m =>
+            m.id === editingMovie.id
+              ? { ...m, title, poster, genre, release_date: releaseDate }
+              : m
+          )
+        )
+
+        setEditingMovie(null)
+      }
+
+    } else {
+
+      const { data, error } = await supabase
+        .from("movies")
+        .insert([{ title, poster, genre, release_date: releaseDate }])
+        .select()
+
+      if (!error) {
+
+        setMovies(prev => [data[0], ...prev])
+
+      }
+
+    }
+
+    setTitle("")
+    setPoster("")
+    setGenre("")
+    setReleaseDate("")
+
+  }
+
   return (
     <section className="xl:col-span-1">
 
@@ -6,112 +80,47 @@ function AdminAddMovieForm() {
 
         <div className="p-6 border-b border-primary/10">
           <h3 className="text-lg font-bold text-white">
-            Add New Movie
+            {editingMovie ? "Edit Movie" : "Add New Movie"}
           </h3>
         </div>
 
-        <form className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
 
-          {/* Title */}
-          <div>
-            <label className="block text-sm text-slate-400 mb-1">
-              Title
-            </label>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Movie title"
+            className="w-full bg-background-dark border border-primary/10 rounded-lg text-white px-3 py-2"
+          />
 
-            <input
-              type="text"
-              placeholder="Movie title"
-              className="w-full bg-background-dark border border-primary/10 rounded-lg text-white px-3 py-2 focus:ring-primary focus:border-primary"
-            />
-          </div>
+          <input
+            value={poster}
+            onChange={(e) => setPoster(e.target.value)}
+            placeholder="Poster URL"
+            className="w-full bg-background-dark border border-primary/10 rounded-lg text-white px-3 py-2"
+          />
 
-          {/* Poster URL */}
-          <div>
-            <label className="block text-sm text-slate-400 mb-1">
-              Poster URL
-            </label>
+          <input
+            value={genre}
+            onChange={(e) => setGenre(e.target.value)}
+            placeholder="Genre"
+            className="w-full bg-background-dark border border-primary/10 rounded-lg text-white px-3 py-2"
+          />
 
-            <input
-              type="url"
-              placeholder="https://..."
-              className="w-full bg-background-dark border border-primary/10 rounded-lg text-white px-3 py-2"
-            />
-          </div>
+          <input
+            type="date"
+            value={releaseDate}
+            onChange={(e) => setReleaseDate(e.target.value)}
+            className="w-full bg-background-dark border border-primary/10 rounded-lg text-white px-3 py-2"
+          />
 
-          {/* Genre + Category */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-            <div>
-              <label className="block text-sm text-slate-400 mb-1">
-                Genre
-              </label>
-
-              <select className="w-full bg-background-dark border border-primary/10 rounded-lg text-white px-3 py-2">
-                <option>Action</option>
-                <option>Sci-Fi</option>
-                <option>Drama</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm text-slate-400 mb-1">
-                Category
-              </label>
-
-              <select className="w-full bg-background-dark border border-primary/10 rounded-lg text-white px-3 py-2">
-                <option>Movie</option>
-                <option>TV Show</option>
-              </select>
-            </div>
-
-          </div>
-
-          {/* Release Date */}
-          <div>
-            <label className="block text-sm text-slate-400 mb-1">
-              Release Date
-            </label>
-
-            <input
-              type="date"
-              className="w-full bg-background-dark border border-primary/10 rounded-lg text-white px-3 py-2"
-            />
-          </div>
-
-          {/* Trailer */}
-          <div>
-            <label className="block text-sm text-slate-400 mb-1">
-              Trailer URL
-            </label>
-
-            <input
-              type="url"
-              placeholder="YouTube link"
-              className="w-full bg-background-dark border border-primary/10 rounded-lg text-white px-3 py-2"
-            />
-          </div>
-
-          {/* Description */}
-          <div>
-            <label className="block text-sm text-slate-400 mb-1">
-              Description
-            </label>
-
-            <textarea
-              rows="3"
-              placeholder="Short movie plot..."
-              className="w-full bg-background-dark border border-primary/10 rounded-lg text-white px-3 py-2"
-            />
-          </div>
-
-          {/* Button */}
           <button className="w-full py-3 bg-primary text-white font-bold rounded-xl flex items-center justify-center gap-2">
 
             <span className="material-symbols-outlined">
-              add_circle
+              {editingMovie ? "edit" : "add_circle"}
             </span>
 
-            Add Movie
+            {editingMovie ? "Modify Movie" : "Add Movie"}
 
           </button>
 

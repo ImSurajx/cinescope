@@ -13,15 +13,32 @@ function Login() {
 
         e.preventDefault()
 
+        console.log("LOGIN:", email, password)
+
+        // ADMIN LOGIN (completely separate from Supabase)
+        if (email === "admin@cinescope.com" && password === "admin123") {
+
+            localStorage.setItem("admin", "true")
+
+            window.location.href = "/admin"
+
+            return
+        }
+
+        // NORMAL USER LOGIN
         const { error } = await supabase.auth.signInWithPassword({
             email,
             password
         })
 
         if (error) {
+
             alert(error.message)
+
         } else {
+
             navigate("/")
+
         }
 
     }
@@ -107,6 +124,7 @@ function Login() {
                                     type="email"
                                     placeholder="name@example.com"
                                     className="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl h-12 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-transparent outline-none placeholder:text-slate-600"
+                                    value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
 
@@ -138,6 +156,7 @@ function Login() {
                                     type="password"
                                     placeholder="Enter your password"
                                     className="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl h-12 pl-12 pr-12 focus:ring-2 focus:ring-primary focus:border-transparent outline-none placeholder:text-slate-600"
+                                    value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
 

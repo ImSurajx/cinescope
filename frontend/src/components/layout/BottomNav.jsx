@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom"
+import { motion } from "framer-motion"
 import { useAuth } from "../../context/AuthContext"
 
 function BottomNav() {
@@ -6,77 +7,59 @@ function BottomNav() {
     const { user } = useAuth()
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-50 flex h-20 md:hidden border-t border-slate-200 dark:border-slate-800 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-xl px-4 pb-2 pt-2">
+        <motion.div
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="fixed bottom-0 left-0 right-0 z-50 flex h-20 md:hidden border-t border-slate-200 dark:border-slate-800 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-xl px-4 pb-2 pt-2"
+        >
 
-            {/* Home */}
-            <NavLink
-                to="/"
-                className={({ isActive }) =>
-                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive
-                        ? "text-primary"
-                        : "text-slate-500 dark:text-slate-400"
-                    }`
-                }
-            >
-                <span className="material-symbols-outlined">home</span>
+            <NavItem icon="home" label="Home" to="/" />
+            <NavItem icon="explore" label="Discover" to="/discover" />
+            <NavItem icon="favorite" label="Favorites" to="/favorites" />
+            <NavItem icon="person" label="Profile" to={user ? "/profile" : "/login"} />
 
-                <p className="text-[10px] font-bold uppercase tracking-wider">
-                    Home
-                </p>
-            </NavLink>
+        </motion.div>
+    )
+}
 
-            {/* Discover */}
-            <NavLink
-                to="/discover"
-                className={({ isActive }) =>
-                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive
-                        ? "text-primary"
-                        : "text-slate-500 dark:text-slate-400"
-                    }`
-                }
-            >
-                <span className="material-symbols-outlined">explore</span>
 
-                <p className="text-[10px] font-bold uppercase tracking-wider">
-                    Discover
-                </p>
-            </NavLink>
+function NavItem({ to, icon, label }) {
 
-            {/* Favorites */}
-            <NavLink
-                to="/favorites"
-                className={({ isActive }) =>
-                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive
-                        ? "text-primary"
-                        : "text-slate-500 dark:text-slate-400"
-                    }`
-                }
-            >
-                <span className="material-symbols-outlined">favorite</span>
+    return (
+        <NavLink
+            to={to}
+            className="flex flex-1 items-center justify-center"
+        >
+            {({ isActive }) => (
 
-                <p className="text-[10px] font-bold uppercase tracking-wider">
-                    Favorites
-                </p>
-            </NavLink>
+                <motion.div
+                    whileTap={{ scale: 0.9 }}
+                    className={`flex flex-col items-center justify-center gap-1 transition-all
+                    ${isActive
+                            ? "text-primary"
+                            : "text-slate-500 dark:text-slate-400"
+                        }`}
+                >
 
-            {/* Profile / Login */}
-            <NavLink
-                to={user ? "/profile" : "/login"}
-                className={({ isActive }) =>
-                    `flex flex-1 flex-col items-center justify-center gap-1 ${isActive
-                        ? "text-primary"
-                        : "text-slate-500 dark:text-slate-400"
-                    }`
-                }
-            >
-                <span className="material-symbols-outlined">person</span>
+                    <motion.span
+                        animate={{
+                            scale: isActive ? 1.15 : 1
+                        }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                        className="material-symbols-outlined"
+                    >
+                        {icon}
+                    </motion.span>
 
-                <p className="text-[10px] font-bold uppercase tracking-wider">
-                    Profile
-                </p>
-            </NavLink>
+                    <p className="text-[10px] font-bold uppercase tracking-wider">
+                        {label}
+                    </p>
 
-        </div>
+                </motion.div>
+
+            )}
+        </NavLink>
     )
 }
 

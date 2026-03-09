@@ -1,9 +1,14 @@
+import { useState } from "react"
+
 import AdminSidebar from "../../components/admin/AdminSidebar"
 import AdminStats from "../../components/admin/AdminStats"
 import AdminAddMovieForm from "../../components/admin/AdminAddMovieForm"
 import AdminMovieTable from "../../components/admin/AdminMovieTable"
 
 function AdminDashboard() {
+
+    const [movies, setMovies] = useState([])
+    const [editingMovie, setEditingMovie] = useState(null)
 
     return (
 
@@ -31,9 +36,17 @@ function AdminDashboard() {
 
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
 
-                    <AdminAddMovieForm />
+                    <AdminAddMovieForm
+                        setMovies={setMovies}
+                        editingMovie={editingMovie}
+                        setEditingMovie={setEditingMovie}
+                    />
 
-                    <AdminMovieTable />
+                    <AdminMovieTable
+                        movies={movies}
+                        setMovies={setMovies}
+                        setEditingMovie={setEditingMovie}
+                    />
 
                 </div>
 

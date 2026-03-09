@@ -6,6 +6,7 @@ body {
   background: #000000;
   color: white;
   user-select: none;
+  overscroll-behavior: none;
 }
 
 * {
@@ -36,4 +37,13 @@ body {
 
 .scale-in {
   animation: scaleIn 0.2s ease;
+}
+
+@keyframes slowZoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+.animate-slowZoom {
+  animation: slowZoom 20s linear infinite alternate;
 }
